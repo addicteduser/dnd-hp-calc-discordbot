@@ -134,5 +134,5 @@ async def on_command_error(ctx, error):
         await ctx.send('Missing CON_modifier parameter.')
 
 
-# if __name__ == '__main__':
-#     client.run(token)
+if __name__ == '__main__':
+    client.run(token)
