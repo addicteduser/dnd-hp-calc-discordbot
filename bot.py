@@ -1,15 +1,17 @@
-# bot.py
-# import os
-# import random
+import os
 import re
-
-# https://www.reddit.com/r/discordapp/comments/96wgc9/how_to_properly_protect_the_bot_token_when/
-
 from discord.ext import commands
-# from dotenv import load_dotenv
 
-# load_dotenv()
-# token = os.getenv('DISCORD_TOKEN')
+
+token = ''
+
+try:
+    token = os.environ['DISCORD_TOKEN']
+except Exception as e:
+    from secrets import DISCORD_TOKEN
+    token = DISCORD_TOKEN
+
+print(token)
 
 bot = commands.Bot(command_prefix='!')
 
@@ -137,6 +139,5 @@ async def on_command_error(ctx, error):
         await ctx.send('Missing CON_modifier parameter.')
 
 
-if __name__ == '__main__':
-    from secrets import DISCORD_TOKEN
-    client.run(DISCORD_TOKEN)
+# if __name__ == '__main__':
+#     client.run(token)
