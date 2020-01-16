@@ -1,5 +1,5 @@
 # For local development
-.env
+secrets.py
 
 ##########################
 

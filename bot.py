@@ -1,13 +1,13 @@
 # bot.py
-import os
-import random
+# import os
+# import random
 import re
 
 from discord.ext import commands
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
-token = os.getenv('DISCORD_TOKEN')
+# load_dotenv()
+# token = os.getenv('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix='!')
 
@@ -135,4 +135,6 @@ async def on_command_error(ctx, error):
         await ctx.send('Missing CON_modifier parameter.')
 
 
-bot.run(token)
+if __name__ == '__main__':
+    from secrets import DISCORD_TOKEN
+    client.run(DISCORD_TOKEN)
