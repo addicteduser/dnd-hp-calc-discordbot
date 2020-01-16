@@ -2,17 +2,12 @@ import os
 import re
 from discord.ext import commands
 
+# for local development
+# from secrets import DISCORD_TOKEN
+# token = DISCORD_TOKEN
 
-token = ''
 
-try:
-    token = os.environ['DISCORD_TOKEN']
-except Exception as e:
-    from secrets import DISCORD_TOKEN
-    token = DISCORD_TOKEN
-
-print(token)
-
+token = os.environ['DISCORD_TOKEN']
 bot = commands.Bot(command_prefix='!')
 
 
