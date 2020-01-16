@@ -3,6 +3,8 @@
 # import random
 import re
 
+# https://www.reddit.com/r/discordapp/comments/96wgc9/how_to_properly_protect_the_bot_token_when/
+
 from discord.ext import commands
 # from dotenv import load_dotenv
 
