@@ -47,7 +47,8 @@ async def hptest(ctx, con_modifier: int, input_classes_and_levels: str, input_hp
     current_hp = 0
 
     regex = re.compile('([a-zA-Z]+)([0-9]+)')
-    char_classes = input_classes_and_levels.lower().split('/')
+    input_classes_and_levels = input_classes_and_levels.lower()
+    char_classes = input_classes_and_levels.split('/')
 
     # if there are char_classes
     if char_classes:
