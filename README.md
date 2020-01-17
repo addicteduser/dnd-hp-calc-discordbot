@@ -8,23 +8,23 @@ Click this [link](https://discordapp.com/api/oauth2/authorize?client_id=66662546
 
 ### Usage
 
-###### Command
+##### Command
 
 `!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`
 
-###### Basic usage example
+##### Basic usage example
 
 `!hp 3 fighter1/barb2/paladin1`
 
-###### Advanced usage example
+##### Advanced usage example
 
 `!hp 3 fighter1/barb2/paladin1 tough/hilldwarf`
 
-###### List of possible `hp_mods`
+##### List of possible `hp_mods`
 
 `hilldwarf`/`hdwarf`/`hd`, `berserkeraxe`/`axe`/`ba`, `tough`/`t`
 
-###### List of possible `classes`
+##### List of possible `classes`
 
 `barbarian`/`barb`, `bard`, `cleric`, `druid`, `fighter`/`fight`, `monk`, `paladin`/`pally`, `ranger`, `rogue`, `sorcerer`/`sorc`, `warlock`/`lock`, `wizard`/`wiz`
 
