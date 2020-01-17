@@ -24,7 +24,9 @@ async def on_ready():
 
 @bot.command()
 async def hphelp(ctx):
-    await ctx.send('Hello, my friend! I am Valron. Here is a guide on how I can help you compute for your hit points.\n'
+    await ctx.send('Hello, my friend! I am Valron. '
+                   'My source code can be found here: https://github.com/addicteduser/dnd-hp-calc-discordbot. '
+                   'Below is a guide on how I can help you compute for your AL D&D 5e character\'s hit points.\n'
                    '>>> **Command**\n'
                    '`!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n\n'
                    '**Basic usage**\n'
