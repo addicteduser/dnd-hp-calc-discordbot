@@ -24,15 +24,19 @@ async def on_ready():
 
 @bot.command()
 async def hphelp(ctx):
-    await ctx.send('>>> Command: `!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n'
-                   '*Note: parameters enclosed in <> are required; those enclosed in [] are optional.*\n\n'
-                   'Basic usage: `!hp 3 fighter1/barb2/paladin1`\n\n'
-                   # 'Advanced usage: `!hp 3 fighter1/barb2/paladin1 tough/hilldwarf`\n'
-                   # 'Possible `hp_mods`: `tough`, `hilldwarf`, `axe` (berserker axe)\n'
-                   'List of possible `classes`:\n'
+    await ctx.send('Hello, my friend! I am Valron. Here is a guide on how I can help you compute for your hit points.\n'
+                   '>>> **Command**\n'
+                   '`!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n\n'
+                   '**Basic usage**\n'
+                   '`!hp 3 fighter1/barb2/paladin1`\n\n'
+                   '**Advanced usage**\n'
+                   '`!hp 3 fighter1/barb2/paladin1 tough/hilldwarf`\n\n'
+                   '**List of possible `hp_mods`**\n'
+                   '`hilldwarf`/`hdwarf`/`hd`, `berserkeraxe`/`axe`/`ba`, `tough`/`t`\n\n'
+                   '**List of possible `classes`**\n'
                    '`barbarian`/`barb`, `bard`, `cleric`, `druid`, '
                    '`fighter`/`fight`, `monk`, `paladin`/`pally`, `ranger`, '
-                   '`rogue`, `sorcerer`/`sorc`, `warlock`/`lock`, `wizard`/`wiz`\n'
+                   '`rogue`, `sorcerer`/`sorc`, `warlock`/`lock`, `wizard`/`wiz`'
                    )
 
 
