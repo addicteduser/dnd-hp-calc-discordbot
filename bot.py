@@ -6,11 +6,11 @@ import typing
 from discord.ext import commands
 
 # for local development
-# from secrets import DISCORD_TOKEN
-# token = DISCORD_TOKEN
+from secrets import DISCORD_TOKEN
+token = DISCORD_TOKEN
 
 # for deployment
-token = os.environ['DISCORD_TOKEN']
+# token = os.environ['DISCORD_TOKEN']
 bot = commands.Bot(command_prefix='!',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
@@ -24,8 +24,8 @@ async def on_ready():
 
 @bot.command()
 async def hphelp(ctx):
-    # await ctx.send('Command: `!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n'
-    await ctx.send('Command: `!hp <con_modifier> <classA#/classB#/etc>`\n'
+    # await ctx.send('>>> Command: `!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n'
+    await ctx.send('>>> Command: `!hp <con_modifier> <classA#/classB#/etc>`\n'
                    '*Note: parameters enclosed in <> are required; those enclosed in [] are optional.*\n\n'
                    'Basic usage: `!hp 3 fighter1/barb2/paladin1`\n\n'
                    # 'Advanced usage: `!hp 3 fighter1/barb2/paladin1 tough/hilldwarf`\n'
@@ -38,7 +38,7 @@ async def hphelp(ctx):
 
 
 @bot.command()
-async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str]):
+async def hptest(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str]):
     dnd_classes = ['barbarian', 'barb', 'bard', 'cleric', 'druid', 'fighter',
                    'fight', 'monk', 'paladin', 'pally', 'ranger', 'rogue',
                    'sorcerer', 'sorc', 'warlock', 'lock', 'wizard', 'wiz']
