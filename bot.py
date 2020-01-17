@@ -83,20 +83,20 @@ async def hptest(ctx, con_modifier: int, input_classes_and_levels: str, input_hp
 
                 # if dnd_class does not exist
                 else:
-                    await ctx.send(f'{ctx.author.mention}: Oof! `{dnd_class}` does not exist! '
-                                   'Check out `!hphelp` for more information :D')
+                    await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{dnd_class}` class! '
+                                   'Check out `!hphelp` for more information.')
                     no_error = False
                     break
 
             # if does not follows word## pattern
             else:
-                await ctx.send(f'{ctx.author.mention}: Oof! Double check your classes and levels (example `barb1/wiz3`)! '
-                               'Check out `!hphelp` for more information :D')
+                await ctx.send(f'Oof! {ctx.author.mention}, my friend, double check your classes and levels (example `barb1/wiz3`)! '
+                               'Check out `!hphelp` for more information.')
                 no_error = False
                 break
 
         if no_error:
-            await ctx.send(f'{ctx.author.mention}: A `{input_classes_and_levels}` character with a Constitution modifier of `{con_modifier}` has `{current_hp}` hit points.')
+            await ctx.send(f'{ctx.author.mention}, my friend, a `{input_classes_and_levels}` character with a Constitution modifier of `{con_modifier}` has `{current_hp}` hit points.')
 
         no_error = True
         current_level = 1
@@ -134,10 +134,10 @@ def get_hit_dice(dnd_class):
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}: Oof! Something is missing! '
+        await ctx.send(f'Oof! {ctx.author.mention}, my friend, something is missing! '
                        'Check out `!hphelp` for more information :D')
     if isinstance(error, commands.errors.BadArgument):
-        await ctx.send(f'{ctx.author.mention}: Oof! What is the constitution modiifier?')
+        await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modiifier?')
 
 
 if __name__ == '__main__':
