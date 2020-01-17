@@ -204,7 +204,7 @@ async def on_command_error(ctx, error):
         await ctx.send(f'Oof! {ctx.author.mention}, my friend, something is missing! '
                        'Check out `!hphelp` for more information :D')
     if isinstance(error, commands.errors.BadArgument):
-        await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modiifier?')
+        await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modifier?')
 
 
 if __name__ == '__main__':
