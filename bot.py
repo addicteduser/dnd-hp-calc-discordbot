@@ -6,11 +6,11 @@ import typing
 from discord.ext import commands
 
 # for local development
-from secrets import DISCORD_TOKEN
-token = DISCORD_TOKEN
+# from secrets import DISCORD_TOKEN
+# token = DISCORD_TOKEN
 
 # for deployment
-# token = os.environ['DISCORD_TOKEN']
+token = os.environ['DISCORD_TOKEN']
 bot = commands.Bot(command_prefix='!',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
@@ -41,7 +41,7 @@ async def hphelp(ctx):
 
 
 @bot.command()
-async def hptest(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
+async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
     dnd_classes = ['barbarian', 'barb', 'bard', 'cleric', 'druid', 'fighter',
                    'fight', 'monk', 'paladin', 'pally', 'ranger', 'rogue',
                    'sorcerer', 'sorc', 'warlock', 'lock', 'wizard', 'wiz']
