@@ -24,7 +24,9 @@ async def on_ready():
 
 @bot.command()
 async def hphelp(ctx):
-    await ctx.send('Hello, my friend! I am Valron. Here is a guide on how I can help you compute for your hit points.\n'
+    await ctx.send('Hello, my friend! I am Valron. '
+                   'My source code can be found here: https://github.com/addicteduser/dnd-hp-calc-discordbot. '
+                   'Below is a guide on how I can help you compute for your AL D&D 5e character\'s hit points.\n'
                    '>>> **Command**\n'
                    '`!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n\n'
                    '**Basic usage**\n'
@@ -100,14 +102,14 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                 # if dnd_class does not exist
                 else:
                     await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{dnd_class}` class! '
-                                   'Check out `!hphelp` for more information.')
+                                   'Check out `!hphelp` for more information. Also, I have a wife!')
                     no_error = False
                     break
 
             # if does not follows word## pattern
             else:
                 await ctx.send(f'Oof! {ctx.author.mention}, my friend, double check your classes and levels (example `barb1/wiz3`)! '
-                               'Check out `!hphelp` for more information.')
+                               'Check out `!hphelp` for more information. Also, I have a wife!')
                 no_error = False
                 break
 
@@ -137,7 +139,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
             # if not valid char_hp_mod
             else:
                 await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{char_hp_mod}` HP modifier! '
-                               'Check out `!hphelp` for more information.')
+                               'Check out `!hphelp` for more information. Also, I have a wife!')
                 no_error = False
                 break
 
@@ -200,9 +202,9 @@ def get_hit_dice(dnd_class):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
         await ctx.send(f'Oof! {ctx.author.mention}, my friend, something is missing! '
-                       'Check out `!hphelp` for more information :D')
+                       'Check out `!hphelp` for more information. Also, I have a wife!')
     if isinstance(error, commands.errors.BadArgument):
-        await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modiifier?')
+        await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modifier?')
 
 
 if __name__ == '__main__':
