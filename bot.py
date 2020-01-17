@@ -6,11 +6,11 @@ import typing
 from discord.ext import commands
 
 # for local development
-# from secrets import DISCORD_TOKEN
-# token = DISCORD_TOKEN
+from secrets import DISCORD_TOKEN
+token = DISCORD_TOKEN
 
 # for deployment
-token = os.environ['DISCORD_TOKEN']
+# token = os.environ['DISCORD_TOKEN']
 bot = commands.Bot(command_prefix='!',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
@@ -24,33 +24,49 @@ async def on_ready():
 
 @bot.command()
 async def hphelp(ctx):
-    # await ctx.send('Command: `!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n'
-    await ctx.send('Command: `!hp <con_modifier> <classA#/classB#/etc>`\n'
-                   '*Note: parameters enclosed in <> are required; those enclosed in [] are optional.*\n\n'
-                   'Basic usage: `!hp 3 fighter1/barb2/paladin1`\n\n'
-                   # 'Advanced usage: `!hp 3 fighter1/barb2/paladin1 tough/hilldwarf`\n'
-                   # 'Possible `hp_mods`: `tough`, `hilldwarf`, `axe` (berserker axe)\n'
-                   'List of possible `classes`:\n'
+    await ctx.send('Hello, my friend! I am Valron. Here is a guide on how I can help you compute for your hit points.\n'
+                   '>>> **Command**\n'
+                   '`!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n\n'
+                   '**Basic usage**\n'
+                   '`!hp 3 fighter1/barb2/paladin1`\n\n'
+                   '**Advanced usage**\n'
+                   '`!hp 3 fighter1/barb2/paladin1 tough/hilldwarf`\n\n'
+                   '**List of possible `hp_mods`**\n'
+                   '`hilldwarf`/`hdwarf`/`hd`, `berserkeraxe`/`axe`/`ba`, `tough`/`t`\n\n'
+                   '**List of possible `classes`**\n'
                    '`barbarian`/`barb`, `bard`, `cleric`, `druid`, '
                    '`fighter`/`fight`, `monk`, `paladin`/`pally`, `ranger`, '
-                   '`rogue`, `sorcerer`/`sorc`, `warlock`/`lock`, `wizard`/`wiz`\n'
+                   '`rogue`, `sorcerer`/`sorc`, `warlock`/`lock`, `wizard`/`wiz`'
                    )
 
 
 @bot.command()
-async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str]):
+async def hptest(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
     dnd_classes = ['barbarian', 'barb', 'bard', 'cleric', 'druid', 'fighter',
                    'fight', 'monk', 'paladin', 'pally', 'ranger', 'rogue',
                    'sorcerer', 'sorc', 'warlock', 'lock', 'wizard', 'wiz']
+    hilldwarf_mods = ['hilldwarf', 'hdwarf', 'hd']
+    berserker_axe_mods = ['berserkeraxe', 'axe', 'ba']
+    tough_mods = ['tough', 't']
+    hp_mods = hilldwarf_mods + berserker_axe_mods + tough_mods
+
+    # flags
     no_error = True
+    is_hilldwarf = False
+    axe_attuned = False
+    is_tough = False
+
+    # character stats
     current_level = 1
     current_hp = 0
 
     regex = re.compile('([a-zA-Z]+)([0-9]+)')
-    char_classes = input_classes_and_levels.lower().split('/')
+    input_classes_and_levels = input_classes_and_levels.lower()
+    char_classes = input_classes_and_levels.split('/')
 
     # if there are char_classes
     if char_classes:
+        # for each char_class
         for char_class in char_classes:
             class_and_level = char_class.strip()
             match = re.match(regex, class_and_level)
@@ -65,6 +81,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                 if dnd_class in dnd_classes:
                     i = 0
                     while i < level:
+                        print('loop')
                         # if first level: max_hp + con_modifier
                         if current_level == 1:
                             current_hp = current_hp + \
@@ -82,28 +99,77 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
 
                 # if dnd_class does not exist
                 else:
-                    await ctx.send(f'{ctx.author.mention}: Oof! `{dnd_class}` does not exist! '
-                                   'Check out `!hphelp` for more information :D')
+                    await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{dnd_class}` class! '
+                                   'Check out `!hphelp` for more information.')
                     no_error = False
                     break
 
             # if does not follows word## pattern
             else:
-                await ctx.send(f'{ctx.author.mention}: Oof! Double check your classes and levels (example `barb1/wiz3`)! '
-                               'Check out `!hphelp` for more information :D')
+                await ctx.send(f'Oof! {ctx.author.mention}, my friend, double check your classes and levels (example `barb1/wiz3`)! '
+                               'Check out `!hphelp` for more information.')
                 no_error = False
                 break
-
-        if no_error:
-            await ctx.send(f'{ctx.author.mention}: A `{input_classes_and_levels}` character with a Constitution modifier of `{con_modifier}` has `{current_hp}` hit points.')
-
-        no_error = True
-        current_level = 1
-        current_hp = 0
 
     # if no char_classes
     else:
         raise commands.MissingRequiredArgument
+
+    # if there are input_hp_mods
+    if input_hp_mods:
+        input_hp_mods = input_hp_mods.lower()
+        char_hp_mods = input_hp_mods.split('/')
+        current_level = current_level - 1
+
+        # for each char_hp_mod
+        for char_hp_mod in char_hp_mods:
+            # if valid char_hp_mod
+            if char_hp_mod in hp_mods:
+                if char_hp_mod in hilldwarf_mods:
+                    current_hp = current_hp + current_level
+                    is_hilldwarf = True
+                elif char_hp_mod in berserker_axe_mods:
+                    current_hp = current_hp + current_level
+                    axe_attuned = True
+                elif char_hp_mod in tough_mods:
+                    current_hp = current_hp + (current_level * 2)
+                    is_tough = True
+            # if not valid char_hp_mod
+            else:
+                await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{char_hp_mod}` HP modifier! '
+                               'Check out `!hphelp` for more information.')
+                no_error = False
+                break
+
+    if no_error:
+        bot_reply = f'{ctx.author.mention}, my friend, a '
+
+        if is_hilldwarf:
+            bot_reply = bot_reply + '`hilldwarf` '
+
+        bot_reply = bot_reply + f'`{input_classes_and_levels}` character '
+
+        if axe_attuned:
+            bot_reply = bot_reply + '`attuned to a berserker axe` '
+
+        bot_reply = bot_reply + \
+            f'with a Constitution modifier of `{con_modifier}` '
+
+        if is_tough:
+            bot_reply = bot_reply + 'and `tough feat` '
+
+        bot_reply = bot_reply + f'has `{current_hp}` hit points.'
+
+        await ctx.send(bot_reply)
+        print(bot_reply)
+
+    # reset values
+    no_error = True
+    is_hilldwarf = False
+    axe_attuned = False
+    is_tough = False
+    current_level = 1
+    current_hp = 0
 
 
 def get_hit_dice(dnd_class):
@@ -133,10 +199,10 @@ def get_hit_dice(dnd_class):
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send(f'{ctx.author.mention}: Oof! Something is missing! '
+        await ctx.send(f'Oof! {ctx.author.mention}, my friend, something is missing! '
                        'Check out `!hphelp` for more information :D')
     if isinstance(error, commands.errors.BadArgument):
-        await ctx.send(f'{ctx.author.mention}: Oof! What is the constitution modiifier?')
+        await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modiifier?')
 
 
 if __name__ == '__main__':
