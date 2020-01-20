@@ -1,6 +1,6 @@
 # Valron the HP Calculator
 
-![Valron the HP Calculator](https://i.imgur.com/0bByXQ4.png)
+![Valron the HP Calculator](https://i.imgur.com/0bByXQ4.png?s=200)
 
 *Art by [Zentrend](https://www.instagram.com/neil_is_zen/).*
 
