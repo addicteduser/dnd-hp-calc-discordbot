@@ -1,5 +1,9 @@
 # Valron the HP Calculator
 
+![Valron the HP Calculator](https://i.imgur.com/0bByXQ4.png?s=200)
+
+*Art by [Zentrend](https://www.instagram.com/neil_is_zen/).*
+
 Discord Bot for computing your AL D&amp;D 5e character's hit points, given the Constitution modifier, its classes and levels, and other HP modifiers such as Tough feat or being a Hill Dwarf.
 
 ### Discord Server Invitation
