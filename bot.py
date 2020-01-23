@@ -83,7 +83,6 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                 if dnd_class in dnd_classes:
                     i = 0
                     while i < level:
-                        print('loop')
                         # if first level: max_hp + con_modifier
                         if current_level == 1:
                             current_hp = current_hp + \
@@ -117,11 +116,12 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
     else:
         raise commands.MissingRequiredArgument
 
+    current_level = current_level - 1
+
     # if there are input_hp_mods
     if input_hp_mods:
         input_hp_mods = input_hp_mods.lower()
         char_hp_mods = input_hp_mods.split('/')
-        current_level = current_level - 1
 
         # for each char_hp_mod
         for char_hp_mod in char_hp_mods:
@@ -143,6 +143,11 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                 no_error = False
                 break
 
+    if current_level > 20:
+        await ctx.send(f'Oof! {ctx.author.mention}, my friend, you have a level `{current_level}` character? '
+                       'My wife says to double check its levels!')
+        no_error = False
+
     if no_error:
         bot_reply = f'{ctx.author.mention}, my friend, a '
 
@@ -163,7 +168,6 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
         bot_reply = bot_reply + f'has `{current_hp}` hit points.'
 
         await ctx.send(bot_reply)
-        print(bot_reply)
 
     # reset values
     no_error = True
