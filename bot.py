@@ -143,13 +143,11 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                 no_error = False
                 break
 
-    if current_level > 20:
-        await ctx.send(f'Oof! {ctx.author.mention}, my friend, you have a level `{current_level}` character? '
-                       'My wife says to double check its levels!')
-        no_error = False
-
     if no_error:
-        bot_reply = f'{ctx.author.mention}, my friend, a '
+        if current_level > 20:
+            bot_reply = f'Oof! {ctx.author.mention}, my friend, you have a level `{current_level}` character? My wife says to double check its levels! But if you really want to know, a '
+        else:
+            bot_reply = f'{ctx.author.mention}, my friend, a '
 
         if is_hilldwarf:
             bot_reply = bot_reply + '`hilldwarf` '
