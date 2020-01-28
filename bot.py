@@ -6,15 +6,19 @@ import typing
 from discord.ext import commands
 
 # for local development
-# from secrets import DISCORD_TOKEN
-# token = DISCORD_TOKEN
+from secrets import DISCORD_TOKEN
+token = DISCORD_TOKEN
 
 # for deployment
-token = os.environ['DISCORD_TOKEN']
+# token = os.environ['DISCORD_TOKEN']
 bot = commands.Bot(command_prefix='!',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
                    help_command=None)
+
+#######################
+## DISCORD BOT START ##
+#######################
 
 
 @bot.event
@@ -26,6 +30,9 @@ async def on_ready():
         print(f' >> {guild.name}')
 
 
+#########################
+## DISCORD BOT LOGGING ##
+#########################
 @bot.event
 async def on_guild_join(guild):
     print(f'Joined {guild.name}!')
@@ -36,6 +43,15 @@ async def on_guild_remove(guild):
     print(f'Left {guild.name}...')
 
 
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.errors.MissingRequiredArgument):
+        await ctx.send(f'Oof! {ctx.author.mention}, my friend, something is missing! '
+                       'Check out `!hphelp` for more information. Also, I have a wife!')
+    if isinstance(error, commands.errors.BadArgument):
+        await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modifier?')
+
+
 @bot.command()
 async def hphelp(ctx):
     await ctx.send('Hello, my friend! I am Valron. '
@@ -43,21 +59,21 @@ async def hphelp(ctx):
                    'If you want to help improve me, my source code can be found here: https://github.com/addicteduser/dnd-hp-calc-discordbot.\n'
                    '>>> **Command**\n'
                    '`!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n\n'
-                   '**Basic usage**\n'
+                   '**Basic usage example**\n'
                    '`!hp 3 fighter1/barb2/paladin1`\n\n'
-                   '**Advanced usage**\n'
+                   '**Advanced usage example**\n'
                    '`!hp 3 fighter1/barb2/paladin1 tough/hilldwarf`\n\n'
-                   '**List of possible `hp_mods`**\n'
-                   '`hilldwarf`/`hdwarf`/`hd`, `berserkeraxe`/`axe`/`ba`, `tough`/`t`\n\n'
                    '**List of possible `classes`**\n'
                    '`barbarian`/`barb`, `bard`, `cleric`, `druid`, '
                    '`fighter`/`fight`, `monk`, `paladin`/`pally`, `ranger`, '
-                   '`rogue`, `sorcerer`/`sorc`, `warlock`/`lock`, `wizard`/`wiz`'
+                   '`rogue`, `sorcerer`/`sorc`, `warlock`/`lock`, `wizard`/`wiz`\n\n'
+                   '**List of possible `hp_mods`**\n'
+                   '`hilldwarf`/`hdwarf`/`hd`, `berserkeraxe`/`axe`/`ba`, `tough`/`t`'
                    )
 
 
 @bot.command()
-async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
+async def hptest(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
     dnd_classes = ['barbarian', 'barb', 'bard', 'cleric', 'druid', 'fighter',
                    'fight', 'monk', 'paladin', 'pally', 'ranger', 'rogue',
                    'sorcerer', 'sorc', 'warlock', 'lock', 'wizard', 'wiz']
@@ -73,7 +89,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
     is_tough = False
 
     # character stats
-    current_level = 1
+    current_level = 0
     current_hp = 0
 
     regex = re.compile('([a-zA-Z]+)([0-9]+)')
@@ -97,20 +113,20 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                 if dnd_class in dnd_classes:
                     i = 0
                     while i < level:
+                        current_level += 1
+                        i += 1
+
                         # if first level: max_hp + con_modifier
                         if current_level == 1:
                             current_hp = current_hp + \
                                 get_hit_dice(dnd_class) + con_modifier
-                            current_level += 1
-                            i += 1
+
                         # if not first level: avg_hd + con_modifier
                         else:
                             avg_hit_dice = math.floor(
                                 get_hit_dice(dnd_class) / 2) + 1
                             current_hp = current_hp + \
                                 avg_hit_dice + con_modifier
-                            current_level += 1
-                            i += 1
 
                 # if dnd_class does not exist
                 else:
@@ -130,7 +146,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
     else:
         raise commands.MissingRequiredArgument
 
-    current_level = current_level - 1
+    # current_level = current_level - 1
 
     # if there are input_hp_mods
     if input_hp_mods:
@@ -212,15 +228,6 @@ def get_hit_dice(dnd_class):
         'wiz': 6
     }
     return switcher.get(dnd_class, 0)
-
-
-@bot.event
-async def on_command_error(ctx, error):
-    if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send(f'Oof! {ctx.author.mention}, my friend, something is missing! '
-                       'Check out `!hphelp` for more information. Also, I have a wife!')
-    if isinstance(error, commands.errors.BadArgument):
-        await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modifier?')
 
 
 if __name__ == '__main__':
