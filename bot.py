@@ -21,12 +21,26 @@ bot = commands.Bot(command_prefix='!',
 async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
 
+    print('Connected to the following Discord servers: ')
+    for guild in bot.guilds:
+        print(f' >> {guild.name}')
+
+
+@bot.event
+async def on_guild_join(guild):
+    print(f'Joined {guild.name}!')
+
+
+@bot.event
+async def on_guild_remove(guild):
+    print(f'Left {guild.name}...')
+
 
 @bot.command()
 async def hphelp(ctx):
     await ctx.send('Hello, my friend! I am Valron. '
-                   'My source code can be found here: https://github.com/addicteduser/dnd-hp-calc-discordbot. '
-                   'Below is a guide on how I can help you compute for your AL D&D 5e character\'s hit points.\n'
+                   'Below is a guide on how I can help you compute for your AL D&D 5e character\'s hit points. '
+                   'If you want to help improve me, my source code can be found here: https://github.com/addicteduser/dnd-hp-calc-discordbot.\n'
                    '>>> **Command**\n'
                    '`!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n\n'
                    '**Basic usage**\n'
