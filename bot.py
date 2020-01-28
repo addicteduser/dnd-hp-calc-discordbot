@@ -79,7 +79,7 @@ async def hphelp(ctx):
 
 
 @bot.command()
-async def hptest(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
+async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
     dnd_classes = ['barbarian', 'barb', 'bard', 'cleric', 'druid', 'fighter',
                    'fight', 'monk', 'paladin', 'pally', 'ranger', 'rogue',
                    'sorcerer', 'sorc', 'warlock', 'lock', 'wizard', 'wiz']
