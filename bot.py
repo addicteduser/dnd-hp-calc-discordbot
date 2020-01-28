@@ -6,11 +6,11 @@ import typing
 from discord.ext import commands
 
 # for local development
-from secrets import DISCORD_TOKEN
-token = DISCORD_TOKEN
+# from secrets import DISCORD_TOKEN
+# token = DISCORD_TOKEN
 
 # for deployment
-# token = os.environ['DISCORD_TOKEN']
+token = os.environ['DISCORD_TOKEN']
 bot = commands.Bot(command_prefix='!',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
@@ -50,6 +50,12 @@ async def on_command_error(ctx, error):
                        'Check out `!hphelp` for more information. Also, I have a wife!')
     if isinstance(error, commands.errors.BadArgument):
         await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modifier?')
+
+    log_error(error, ctx.message.content)
+
+##################
+## BOT COMMANDS ##
+##################
 
 
 @bot.command()
@@ -132,6 +138,8 @@ async def hptest(ctx, con_modifier: int, input_classes_and_levels: str, input_hp
                 else:
                     await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{dnd_class}` class! '
                                    'Check out `!hphelp` for more information. Also, I have a wife!')
+                    log_error(f'Unknown `{dnd_class}` class.',
+                              ctx.message.content)
                     no_error = False
                     break
 
@@ -139,14 +147,14 @@ async def hptest(ctx, con_modifier: int, input_classes_and_levels: str, input_hp
             else:
                 await ctx.send(f'Oof! {ctx.author.mention}, my friend, double check your classes and levels (example `barb1/wiz3`)! '
                                'Check out `!hphelp` for more information. Also, I have a wife!')
+                log_error('Does not follow the classA##/classB##/etc format.',
+                          ctx.message.content)
                 no_error = False
                 break
 
     # if no char_classes
     else:
         raise commands.MissingRequiredArgument
-
-    # current_level = current_level - 1
 
     # if there are input_hp_mods
     if input_hp_mods:
@@ -170,6 +178,8 @@ async def hptest(ctx, con_modifier: int, input_classes_and_levels: str, input_hp
             else:
                 await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{char_hp_mod}` HP modifier! '
                                'Check out `!hphelp` for more information. Also, I have a wife!')
+                log_error(f'Unknown `{char_hp_mod}` HP modifier.',
+                          ctx.message.content)
                 no_error = False
                 break
 
@@ -204,6 +214,11 @@ async def hptest(ctx, con_modifier: int, input_classes_and_levels: str, input_hp
     is_tough = False
     current_level = 1
     current_hp = 0
+
+
+def log_error(error, msg):
+    print(f'ERROR: {error}')
+    print(f'COMMAND: {msg}')
 
 
 def get_hit_dice(dnd_class):
