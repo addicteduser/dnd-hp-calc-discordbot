@@ -62,7 +62,8 @@ async def on_command_error(ctx, error):
 async def hphelp(ctx):
     await ctx.send('Hello, my friend! I am Valron. '
                    'Below is a guide on how I can help you compute for your AL D&D 5e character\'s hit points. '
-                   'If you want to help improve me, my source code can be found here: https://github.com/addicteduser/dnd-hp-calc-discordbot.\n'
+                   'If you want to help improve me, my source code (and server invite!) can be found here: '
+                   'https://github.com/addicteduser/dnd-hp-calc-discordbot.\n'
                    '>>> **Command**\n'
                    '`!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n\n'
                    '**Basic usage example**\n'
@@ -72,7 +73,8 @@ async def hphelp(ctx):
                    '**List of possible `classes`**\n'
                    '`barbarian`/`barb`, `bard`, `cleric`, `druid`, '
                    '`fighter`/`fight`, `monk`, `paladin`/`pally`, `ranger`, '
-                   '`rogue`, `sorcerer`/`sorc`, `warlock`/`lock`, `wizard`/`wiz`\n\n'
+                   '`rogue`, `sorcerer`/`sorc`/`draconicsorc`/`dracsorc`, '
+                   '`warlock`/`lock`, `wizard`/`wiz`\n\n'
                    '**List of possible `hp_mods`**\n'
                    '`hilldwarf`/`hdwarf`/`hd`, `berserkeraxe`/`axe`/`ba`, `tough`/`t`'
                    )
@@ -82,7 +84,8 @@ async def hphelp(ctx):
 async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
     dnd_classes = ['barbarian', 'barb', 'bard', 'cleric', 'druid', 'fighter',
                    'fight', 'monk', 'paladin', 'pally', 'ranger', 'rogue',
-                   'sorcerer', 'sorc', 'warlock', 'lock', 'wizard', 'wiz']
+                   'sorcerer', 'sorc', 'draconicsorc', 'dracsorc',
+                   'warlock', 'lock', 'wizard', 'wiz']
     hilldwarf_mods = ['hilldwarf', 'hdwarf', 'hd']
     berserker_axe_mods = ['berserkeraxe', 'axe', 'ba']
     tough_mods = ['tough', 't']
@@ -133,6 +136,10 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                                 get_hit_dice(dnd_class) / 2) + 1
                             current_hp = current_hp + \
                                 avg_hit_dice + con_modifier
+
+                    # if dnd_class is a draconic sorcerer
+                    if (dnd_class == 'draconicsorc' or dnd_class == 'dracsorc'):
+                        current_hp = current_hp + level
 
                 # if dnd_class does not exist
                 else:
@@ -237,6 +244,8 @@ def get_hit_dice(dnd_class):
         'rogue': 8,
         'sorcerer': 6,
         'sorc': 6,
+        'draconicsorc': 6,
+        'dracsorc': 6,
         'warlock': 8,
         'lock': 8,
         'wizard': 6,
