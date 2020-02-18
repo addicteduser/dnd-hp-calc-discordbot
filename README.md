@@ -30,7 +30,7 @@ Click this [link](https://discordapp.com/api/oauth2/authorize?client_id=66662546
 
 ##### List of possible `classes`
 
-`barbarian`/`barb`, `bard`, `cleric`, `druid`, `fighter`/`fight`, `monk`, `paladin`/`pally`, `ranger`, `rogue`, `sorcerer`/`sorc`, `warlock`/`lock`, `wizard`/`wiz`
+`barbarian`/`barb`, `bard`, `cleric`, `druid`, `fighter`/`fight`, `monk`, `paladin`/`pally`, `ranger`, `rogue`, `sorcerer`/`sorc`/`draconicsorc`/`dracsorc`, `warlock`/`lock`, `wizard`/`wiz`
 
 ### Development
 
