@@ -6,11 +6,11 @@ import typing
 from discord.ext import commands
 
 # for local development
-# from secrets import DISCORD_TOKEN
-# token = DISCORD_TOKEN
+from secrets import DISCORD_TOKEN
+token = DISCORD_TOKEN
 
 # for deployment
-token = os.environ['DISCORD_TOKEN']
+# token = os.environ['DISCORD_TOKEN']
 bot = commands.Bot(command_prefix='!',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
@@ -72,17 +72,19 @@ async def hphelp(ctx):
                    '**List of possible `classes`**\n'
                    '`barbarian`/`barb`, `bard`, `cleric`, `druid`, '
                    '`fighter`/`fight`, `monk`, `paladin`/`pally`, `ranger`, '
-                   '`rogue`, `sorcerer`/`sorc`, `warlock`/`lock`, `wizard`/`wiz`\n\n'
+                   '`rogue`, `sorcerer`/`sorc`/`draconicsorc`/`dracsorc`, '
+                   '`warlock`/`lock`, `wizard`/`wiz`\n\n'
                    '**List of possible `hp_mods`**\n'
                    '`hilldwarf`/`hdwarf`/`hd`, `berserkeraxe`/`axe`/`ba`, `tough`/`t`'
                    )
 
 
 @bot.command()
-async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
+async def hptest(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
     dnd_classes = ['barbarian', 'barb', 'bard', 'cleric', 'druid', 'fighter',
                    'fight', 'monk', 'paladin', 'pally', 'ranger', 'rogue',
-                   'sorcerer', 'sorc', 'warlock', 'lock', 'wizard', 'wiz']
+                   'sorcerer', 'sorc', 'draconicsorc', 'dracsorc',
+                   'warlock', 'lock', 'wizard', 'wiz']
     hilldwarf_mods = ['hilldwarf', 'hdwarf', 'hd']
     berserker_axe_mods = ['berserkeraxe', 'axe', 'ba']
     tough_mods = ['tough', 't']
@@ -133,6 +135,10 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                                 get_hit_dice(dnd_class) / 2) + 1
                             current_hp = current_hp + \
                                 avg_hit_dice + con_modifier
+
+                    # if dnd_class is a draconic sorcerer
+                    if (dnd_class == 'draconicsorc' or dnd_class == 'dracsorc'):
+                        current_hp = current_hp + level
 
                 # if dnd_class does not exist
                 else:
@@ -237,6 +243,8 @@ def get_hit_dice(dnd_class):
         'rogue': 8,
         'sorcerer': 6,
         'sorc': 6,
+        'draconicsorc': 6,
+        'dracsorc': 6,
         'warlock': 8,
         'lock': 8,
         'wizard': 6,
