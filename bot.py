@@ -6,11 +6,11 @@ import typing
 from discord.ext import commands
 
 # for local development
-from secrets import DISCORD_TOKEN
-token = DISCORD_TOKEN
+# from secrets import DISCORD_TOKEN
+# token = DISCORD_TOKEN
 
 # for deployment
-# token = os.environ['DISCORD_TOKEN']
+token = os.environ['DISCORD_TOKEN']
 bot = commands.Bot(command_prefix='!',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
@@ -62,7 +62,8 @@ async def on_command_error(ctx, error):
 async def hphelp(ctx):
     await ctx.send('Hello, my friend! I am Valron. '
                    'Below is a guide on how I can help you compute for your AL D&D 5e character\'s hit points. '
-                   'If you want to help improve me, my source code can be found here: https://github.com/addicteduser/dnd-hp-calc-discordbot.\n'
+                   'If you want to help improve me, my source code (and server invite!) can be found here: '
+                   'https://github.com/addicteduser/dnd-hp-calc-discordbot.\n'
                    '>>> **Command**\n'
                    '`!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n\n'
                    '**Basic usage example**\n'
@@ -80,7 +81,7 @@ async def hphelp(ctx):
 
 
 @bot.command()
-async def hptest(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
+async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
     dnd_classes = ['barbarian', 'barb', 'bard', 'cleric', 'druid', 'fighter',
                    'fight', 'monk', 'paladin', 'pally', 'ranger', 'rogue',
                    'sorcerer', 'sorc', 'draconicsorc', 'dracsorc',
