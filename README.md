@@ -12,6 +12,10 @@ Discord Bot for computing your AL D&amp;D 5e character's hit points, given the C
 
 Click this [link](https://discordapp.com/api/oauth2/authorize?client_id=666625461811413008&permissions=11264&scope=bot).
 
+### Support Server Invitation
+
+Click this [link](https://discord.gg/waCBQuD).
+
 ### Usage
 
 ##### Command
