@@ -47,7 +47,7 @@ async def on_guild_remove(guild):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
         await ctx.send(f'Oof! {ctx.author.mention}, my friend, something is missing! '
-                       'Check out `!hphelp` for more information. Also, I have a wife!')
+                       'Check out `?hphelp` for more information. Also, I have a wife!')
     if isinstance(error, commands.errors.BadArgument):
         await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modifier?')
 
@@ -65,11 +65,11 @@ async def hphelp(ctx):
                    'If you want to help improve me, my source code (and server invite!) can be found here: '
                    'https://github.com/addicteduser/dnd-hp-calc-discordbot.\n'
                    '>>> **Command**\n'
-                   '`!hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n\n'
+                   '`?hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`\n\n'
                    '**Basic usage example**\n'
-                   '`!hp 3 fighter1/barb2/paladin1`\n\n'
+                   '`?hp 3 fighter1/barb2/paladin1`\n\n'
                    '**Advanced usage example**\n'
-                   '`!hp 3 fighter1/barb2/paladin1 tough/hilldwarf`\n\n'
+                   '`?hp 3 fighter1/barb2/paladin1 tough/hilldwarf`\n\n'
                    '**List of possible `classes`**\n'
                    '`barbarian`/`barb`, `bard`, `cleric`, `druid`, '
                    '`fighter`/`fight`, `monk`, `paladin`/`pally`, `ranger`, '
@@ -144,7 +144,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                 # if dnd_class does not exist
                 else:
                     await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{dnd_class}` class! '
-                                   'Check out `!hphelp` for more information. Also, I have a wife!')
+                                   'Check out `?hphelp` for more information. Also, I have a wife!')
                     log_error(f'Unknown `{dnd_class}` class.',
                               ctx.message.content)
                     no_error = False
@@ -153,7 +153,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
             # if does not follows word## pattern
             else:
                 await ctx.send(f'Oof! {ctx.author.mention}, my friend, double check your classes and levels (example `barb1/wiz3`)! '
-                               'Check out `!hphelp` for more information. Also, I have a wife!')
+                               'Check out `?hphelp` for more information. Also, I have a wife!')
                 log_error('Does not follow the classA##/classB##/etc format.',
                           ctx.message.content)
                 no_error = False
@@ -184,7 +184,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
             # if not valid char_hp_mod
             else:
                 await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{char_hp_mod}` HP modifier! '
-                               'Check out `!hphelp` for more information. Also, I have a wife!')
+                               'Check out `?hphelp` for more information. Also, I have a wife!')
                 log_error(f'Unknown `{char_hp_mod}` HP modifier.',
                           ctx.message.content)
                 no_error = False
