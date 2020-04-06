@@ -4,6 +4,7 @@ import math
 import discord
 import typing
 from discord.ext import commands
+from discord.utils import get
 
 # for local development
 # from secrets import DISCORD_TOKEN
@@ -211,6 +212,11 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
             bot_reply = bot_reply + 'and `tough feat` '
 
         bot_reply = bot_reply + f'has `{current_hp}` hit points.'
+
+        if((ctx.guild.name == 'Natural Newbie') and (con_modifier < 0)):
+            summon = get(ctx.guild.members, name='corgibutt')
+            bot_reply = bot_reply + '\n\nOof! You have a negative Constitution modifier! ' + \
+                f'My wife tells me that I should summon {summon.mention}!'
 
         await ctx.send(bot_reply)
 
