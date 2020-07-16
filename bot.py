@@ -7,11 +7,11 @@ from discord.ext import commands
 from discord.utils import get
 
 # for local development
-# from secrets import DISCORD_TOKEN
-# token = DISCORD_TOKEN
+from secrets import DISCORD_TOKEN
+token = DISCORD_TOKEN
 
 # for deployment
-token = os.environ['DISCORD_TOKEN']
+# token = os.environ['DISCORD_TOKEN']
 bot = commands.Bot(command_prefix='?',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
@@ -213,6 +213,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
 
         bot_reply = bot_reply + f'has `{current_hp}` hit points.'
 
+        # On NN server, summon corgi when there is negative con
         if((ctx.guild.name == 'Natural Newbie') and (con_modifier < 0)):
             summon = get(ctx.guild.members, name='corgibutt')
             bot_reply = bot_reply + '\n\nOof! You have a negative Constitution modifier! ' + \
