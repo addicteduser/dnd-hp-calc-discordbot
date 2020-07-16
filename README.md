@@ -57,4 +57,4 @@ Click this [link](https://discord.gg/waCBQuD).
 
 ### Dontation/Support
 
-Hello, hello! This bot that I have made is just a little passion project of mine. While I would love to keep it up and running 24/7, the free resources the hosting site I'm using could not accommodate it. Any [support or donation](https://paypal.me/addicteduser) is much appreciated if I were to switch to paid hosting services. Thank you very much!
+Hello, hello! This bot that I have made is just a little passion project of mine. Any [support or donation](https://paypal.me/addicteduser) is much appreciated to keep up with the hosting fees. Thank you very much!
