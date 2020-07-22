@@ -7,11 +7,11 @@ from discord.ext import commands
 from discord.utils import get
 
 # for local development
-# from secrets import DISCORD_TOKEN
-# token = DISCORD_TOKEN
+from secrets import DISCORD_TOKEN
+token = DISCORD_TOKEN
 
 # for deployment
-token = os.environ['DISCORD_TOKEN']
+# token = os.environ['DISCORD_TOKEN']
 bot = commands.Bot(command_prefix='?',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
