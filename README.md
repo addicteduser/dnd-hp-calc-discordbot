@@ -53,7 +53,7 @@ Click this [link](https://discord.gg/waCBQuD).
 
 ### Development
 
-- [discord.py v1.2.5](https://discordpy.readthedocs.io/en/latest/), a modern, easy to use, feature-rich, and async ready API wrapper for Discord
+- [discord.py v1.3.4](https://discordpy.readthedocs.io/en/latest/), a modern, easy to use, feature-rich, and async ready API wrapper for Discord
 
 ### Dontation/Support
 
