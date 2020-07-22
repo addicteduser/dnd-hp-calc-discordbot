@@ -213,6 +213,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
 
         bot_reply = bot_reply + f'has `{current_hp}` hit points.'
 
+        # On NN server, summon corgi when there is negative con
         if((ctx.guild.name == 'Natural Newbie') and (con_modifier < 0)):
             summon = get(ctx.guild.members, name='corgibutt')
             bot_reply = bot_reply + '\n\nOof! You have a negative Constitution modifier! ' + \
