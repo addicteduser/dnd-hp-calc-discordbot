@@ -85,10 +85,15 @@ async def help(ctx):
 
 @bot.command()
 async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
-    dnd_classes = ['barbarian', 'barb', 'bard', 'cleric', 'druid', 'fighter',
-                   'fight', 'monk', 'paladin', 'pally', 'ranger', 'rogue',
-                   'sorcerer', 'sorc', 'draconicsorc', 'dracsorc',
-                   'warlock', 'lock', 'wizard', 'wiz']
+    dnd_classes = ['artificer', 'art', 'a',
+                   'barbarian', 'barb', 'bb', 'bard', 'bd',
+                   'cleric', 'cl', 'c', 'druid', 'dr', 'd',
+                   'fighter', 'fight', 'f', 'monk', 'mk', 'm',
+                   'paladin', 'pally', 'p',
+                   'ranger', 'ra', 'rogue', 'ro',
+                   'sorcerer', 'sorc', 's',
+                   'draconicsorcerer', 'draconicsorc', 'dracsorc', 'ds',
+                   'warlock', 'lock', 'wr', 'wizard', 'wiz', 'wz']
     hilldwarf_mods = ['hilldwarf', 'hdwarf', 'hd']
     berserker_axe_mods = ['berserkeraxe', 'axe', 'ba']
     tough_mods = ['tough', 't']
@@ -239,26 +244,20 @@ def log_error(error, msg):
 
 def get_hit_dice(dnd_class):
     switcher = {
-        'barbarian': 12,
-        'barb': 12,
-        'bard': 8,
-        'cleric': 8,
-        'druid': 8,
-        'fighter': 10,
-        'fight': 10,
-        'monk': 8,
-        'paladin': 10,
-        'pally': 10,
-        'ranger': 10,
-        'rogue': 8,
-        'sorcerer': 6,
-        'sorc': 6,
-        'draconicsorc': 6,
-        'dracsorc': 6,
-        'warlock': 8,
-        'lock': 8,
-        'wizard': 6,
-        'wiz': 6
+        'artificer': 8, 'art': 8, 'a': 8,
+        'barbarian': 12, 'barb': 12, 'bb': 12,
+        'bard': 8, 'bd': 8,
+        'cleric': 8, 'cl': 8, 'c': 8,
+        'druid': 8, 'dr': 8, 'd': 8,
+        'fighter': 10, 'fight': 10, 'f': 10,
+        'monk': 8, 'mk': 8, 'm': 8,
+        'paladin': 10, 'pally': 10, 'p': 10,
+        'ranger': 10, 'ra': 10,
+        'rogue': 8, 'ro': 8,
+        'sorcerer': 6, 'sorc': 6, 's': 6,
+        'draconicsorcerer': 6, 'draconicsorc': 6, 'dracsorc': 6, 'ds': 6,
+        'warlock': 8, 'lock': 8, 'wr': 8,
+        'wizard': 6, 'wiz': 6, 'wz': 6
     }
     return switcher.get(dnd_class, 0)
 
