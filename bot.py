@@ -62,7 +62,7 @@ async def on_command_error(ctx, error):
 
 
 @bot.command()
-async def hphelp(ctx):
+async def help(ctx):
     await ctx.send('Hello, my friend! I am Valron. '
                    'Below is a guide on how I can help you compute for your AL D&D 5e character\'s hit points. '
                    'If you want to help improve me, my source code (and server invite!) can be found here: '
