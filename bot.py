@@ -26,9 +26,11 @@ bot = commands.Bot(command_prefix='?',
 async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
 
-    print('Connected to the following Discord servers: ')
-    for guild in bot.guilds:
-        print(f' >> {guild.name}')
+    # print('Connected to the following Discord servers: ')
+    # for guild in bot.guilds:
+    #     print(f' >> {guild.name}')
+
+    print(f'Connected to {len(bot.guilds)} Discord servers!')
 
 
 #########################
