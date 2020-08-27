@@ -62,6 +62,68 @@ async def on_command_error(ctx, error):
 
 
 @bot.command()
+async def test(ctx):
+    embed = discord.Embed(title="",
+                          url="https://github.com/addicteduser/dnd-hp-calc-discordbot",
+                          description="Hello, my friend! I am Valron. Below is a guide on how I can help you compute for your AL D&D 5e character's hit points.", color=0x1abc9c)
+    embed.set_author(name="Valron the HP Calculator",
+                     url="https://github.com/addicteduser/dnd-hp-calc-discordbot",
+                     icon_url="https://i.imgur.com/0bByXQ4.png")
+    embed.set_thumbnail(url="https://i.imgur.com/0bByXQ4.png")
+    embed.add_field(name="Command",
+                    value="`?hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`",
+                    inline=False)
+    embed.add_field(name="Example",
+                    value="`?hp 3 fighter1/barb2/paladin1`",
+                    inline=False)
+    embed.add_field(name="Example w/ HP modifiers",
+                    value="`?hp 3 fighter1/barb2/paladin1 tough/hilldwarf`",
+                    inline=False)
+    embed.set_footer(
+        text='?options - to see the list of supported classes and HP modifiers'
+             '?links - to view some helpful links :smile:')
+    # '?invite - to get the invite link')
+    await ctx.send(embed=embed)
+
+
+@bot.command()
+async def options(ctx):
+    embed = discord.Embed(title="",
+                          url="https://github.com/addicteduser/dnd-hp-calc-discordbot",
+                          description="Hello, my friend! I am Valron. Here are the supported classes and HP modifiers for your reference.", color=0x1abc9c)
+    embed.set_author(name="Valron the HP Calculator",
+                     url="https://github.com/addicteduser/dnd-hp-calc-discordbot",
+                     icon_url="https://i.imgur.com/0bByXQ4.png")
+    embed.set_thumbnail(url="https://i.imgur.com/0bByXQ4.png")
+    embed.add_field(name="List of supported classes",
+                    value='- `artificer` (`art`, `a`)\n'
+                          '- `barbarian` (`barb`, `bb`)\n'
+                          '- `bard` (`bd`)\n'
+                          '- `cleric` (`cl`, `c`)\n'
+                          '- `druid` (`dr`, `d`)\n'
+                          '- `fighter` (`fight`, `f`)\n'
+                          '- `monk` (`mk`, `m`)\n'
+                          '- `paladin` (`pally`, `p`)\n'
+                          '- `ranger` (`ra`)\n'
+                          '- `rogue` (`ro`)\n'
+                          '- `sorcerer` (`sorc`, `s`)\n'
+                          '- `draconicsorcerer` (`draconicsorc`, `dracsorc`, `ds`)\n'
+                          '- `warlock` (`lock`, `wr`)\n'
+                          '- `wizard` (`wiz`, `wz`)',
+                    inline=False)
+
+    embed.add_field(name="List of supported HP modifiers",
+                    value='- `hilldwarf` (`hdwarf`, `hd`)\n'
+                          '- `berserkeraxe` (`axe`, `ba`)\n'
+                          '- `tough` (`t`)',
+                    inline=False)
+    embed.set_footer(
+        text='?options - to see the list of supported classes and HP modifiers')
+    # '?invite - to get the invite link')
+    await ctx.send(embed=embed)
+
+
+@bot.command()
 async def help(ctx):
     await ctx.send('Hello, my friend! I am Valron. '
                    'Below is a guide on how I can help you compute for your AL D&D 5e character\'s hit points. '
