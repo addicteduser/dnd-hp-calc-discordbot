@@ -10,7 +10,7 @@ Discord Bot for computing your AL D&amp;D 5e character's hit points, given the C
 
 ### Discord Server Invitation
 
-Add it to your Discord server with this [link](https://discordapp.com/api/oauth2/authorize?client_id=666625461811413008&permissions=11264&scope=bot).
+Invite it to your Discord server with this [link](https://discordapp.com/api/oauth2/authorize?client_id=666625461811413008&permissions=11264&scope=bot).
 
 ### Usage
 
@@ -18,34 +18,19 @@ Add it to your Discord server with this [link](https://discordapp.com/api/oauth2
 
 `?hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`
 
-##### Basic usage example
+##### Example
 
 `?hp 3 fighter1/barb2/paladin1`
 
-##### Advanced usage example
+##### Example with HP modifiers
 
 `?hp 3 fighter1/barb2/paladin1 tough/hilldwarf`
 
-##### List of possible `hp_mods`
+##### Other commands
 
-- `hilldwarf`/`hdwarf`/`hd`
-- `berserkeraxe`/`axe`/`ba`
-- `tough`/`t`
-
-##### List of possible `classes`
-
-- `barbarian`/`barb`
-- `bard`
-- `cleric`
-- `druid`
-- `fighter`/`fight`
-- `monk`
-- `paladin`/`pally`
-- `ranger`
-- `rogue`
-- `sorcerer`/`sorc`/`draconicsorc`/`dracsorc`
-- `warlock`/`lock`
-- `wizard`/`wiz`
+- `?help` - main help command
+- `?options` - to see the list of supported classes and HP modifiers
+- `?links` - to view some helpful links
 
 ### Dependencies
 
