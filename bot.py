@@ -3,6 +3,7 @@ import re
 import math
 import discord
 import typing
+import time
 from discord.ext import commands
 from discord.utils import get
 import helper
@@ -13,7 +14,7 @@ token = DISCORD_TOKEN
 
 # for deployment
 # token = os.environ['DISCORD_TOKEN']
-bot = commands.Bot(command_prefix='?',
+bot = commands.Bot(command_prefix='??',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
                    help_command=None)
@@ -154,6 +155,7 @@ async def links(ctx):
 @bot.command()
 async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
     # await ctx.send(get_bot_reply(con_modifier, input_classes_and_levels, input_hp_mods))
+    tic = time.perf_counter()
     ###############
     ## CONSTANTS ##
     ###############
@@ -317,6 +319,9 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
         ## SEND BOT REPLY ##
         ####################
         await ctx.send(bot_reply)
+
+    toc = time.perf_counter()
+    print(f"Downloaded the tutorial in {toc - tic:0.4f} seconds")
 
 
 def log_error(error, msg):
