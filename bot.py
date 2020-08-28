@@ -3,6 +3,7 @@ import re
 import math
 import discord
 import typing
+import time
 from discord.ext import commands
 from discord.utils import get
 
@@ -153,6 +154,7 @@ async def links(ctx):
 
 @bot.command()
 async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
+    tic = time.perf_counter()
     dnd_classes = ['artificer', 'art', 'a',
                    'barbarian', 'barb', 'bb', 'bard', 'bd',
                    'cleric', 'cl', 'c', 'druid', 'dr', 'd',
@@ -295,6 +297,9 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                 f'My wife tells me that I should summon {summon.mention}!'
 
         await ctx.send(bot_reply)
+
+    toc = time.perf_counter()
+    print(f"Downloaded the tutorial in {toc - tic:0.4f} seconds")
 
     # reset values
     no_error = True
