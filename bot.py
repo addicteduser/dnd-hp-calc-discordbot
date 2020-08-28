@@ -57,11 +57,10 @@ async def on_command_error(ctx, error):
 
     log_error(error, ctx.message.content)
 
+
 ##################
 ## BOT COMMANDS ##
 ##################
-
-
 @bot.command()
 async def help(ctx):
     embed = discord.Embed(title="",
@@ -174,9 +173,9 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
     #####################
     ## CHARACTER STATS ##
     #####################
+    current_classes_and_levels = []
     current_level = 0
     current_hp = 0
-    current_classes_and_levels = []
 
     #########################
     ## BASE HP CALCULATION ##
@@ -191,10 +190,9 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
         # Compute for the HP of each class
         for parsed_class_and_level in parsed_classes_and_levels:
             class_and_level = parsed_class_and_level.strip()
-            match = re.match(regex, class_and_level)
 
             # If it follows word## pattern
-            if match:
+            if re.match(regex, class_and_level):
                 result = re.split(regex, class_and_level)
                 matched_dnd_class = result[1]
                 matched_level = int(result[2])
@@ -227,7 +225,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                     if dnd_class.name == 'Draconic Sorcerer':
                         current_hp = current_hp + matched_level
 
-                # if matched_dnd_class does not exist in list of supported D&D classes
+                # If matched_dnd_class does not exist in list of supported D&D classes
                 else:
                     await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{matched_dnd_class}` class! '
                                    'My wife says to use `?help` for more information.')
@@ -236,49 +234,17 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                     no_error = False
                     break
 
-                # # if dnd_class is in list of dnd_classes
-                # if matched_dnd_class in dnd_classes:
-                #     i = 0
-                #     while i < matched_level:
-                #         current_level += 1
-                #         i += 1
-                #
-                #         # if first level: max_hp + con_modifier
-                #         if current_level == 1:
-                #             current_hp = current_hp + \
-                #                 get_hit_dice(dnd_class) + con_modifier
-                #
-                #         # if not first level: avg_hd + con_modifier
-                #         else:
-                #             avg_hit_dice = math.floor(
-                #                 get_hit_dice(dnd_class) / 2) + 1
-                #             current_hp = current_hp + \
-                #                 avg_hit_dice + con_modifier
-                #
-                #     # if dnd_class is a draconic sorcerer
-                #     if (matched_dnd_class == 'draconicsorcerer' or matched_dnd_class == 'draconicsorc' or matched_dnd_class == 'dracsorc' or matched_dnd_class == 'ds'):
-                #         current_hp = current_hp + matched_level
-                #
-                # # if dnd_class does not exist
-                # else:
-                #     await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{dnd_class}` class! '
-                #                    'Check out `?help` for more information. Also, I have a wife!')
-                #     log_error(f'Unknown `{dnd_class}` class.',
-                #               ctx.message.content)
-                #     no_error = False
-                #     break
-
-            # if does not follows word## pattern
+            # If it does not follow word## pattern
             else:
                 await ctx.send(f'Oof! {ctx.author.mention}, my friend, kindly check your classes and levels! '
-                               'It must look like this `barb1/wizard2`. '
-                               'My wife says to use `?help` for more information')
+                               'It must look something like this `barb1/wizard2`. '
+                               'My wife says to use `?help` for more information.')
                 log_error('Does not follow the classA##/classB##/etc format.',
                           ctx.message.content)
                 no_error = False
                 break
 
-    # if no parsed_classes_and_levels
+    # If there are no parsed_classes_and_levels
     else:
         raise commands.MissingRequiredArgument
 
@@ -306,7 +272,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
             # if not valid char_hp_mod
             else:
                 await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{char_hp_mod}` HP modifier! '
-                               'Check out `?help` for more information. Also, I have a wife!')
+                               'My wife says to use `?help` for more information.')
                 log_error(f'Unknown `{char_hp_mod}` HP modifier.',
                           ctx.message.content)
                 no_error = False
