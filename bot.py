@@ -4,9 +4,11 @@ import math
 import discord
 import typing
 import time
+import helper
+
 from discord.ext import commands
 from discord.utils import get
-import helper
+
 
 # for local development
 from secrets import DISCORD_TOKEN
@@ -14,7 +16,7 @@ token = DISCORD_TOKEN
 
 # for deployment
 # token = os.environ['DISCORD_TOKEN']
-bot = commands.Bot(command_prefix='??',
+bot = commands.Bot(command_prefix='?',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
                    help_command=None)

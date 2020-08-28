@@ -1,17 +1,31 @@
 class Class:
+    """Represents a D&D class.
+
+    Args:
+        name (str): The name of the class.
+        aliases (list(str)): The list of aliases of the class.
+        hit_die (int): The maximum hit die value.
+
+    Attributes:
+        name: The name of the class.
+        aliases: The list of aliases of the class.
+        hit_die: The maximum hit die value.
+
+    """
+
     def __init__(self, name, aliases, hit_die):
         self.name = name
         self.aliases = aliases
         self.hit_die = hit_die
 
     def get_class(self, alias):
-        """Returns the class given one of its aliases.
+        """Returns the D&D class given an alias.
 
         Args:
-            alias (String): An alias of the class.
+            alias (str): An alias of the class.
 
         Returns:
-            String: The name of the class.
+            Class: A D&D class.
 
         """
         if alias in self.aliases:
@@ -19,6 +33,12 @@ class Class:
 
 
 def get_classes():
+    """Returns the list of possible D&D classes.
+
+    Returns:
+        list(Class): A list of D&D classes.
+
+    """
     classes = []
 
     classes.append(Class('Artificer', ['artificer', 'art', 'a'], 8))
@@ -51,6 +71,15 @@ DND_CLASSES = get_classes()
 
 
 def get_class(alias):
+    """Returns the D&D class given an alias.
+
+    Args:
+        alias (str): An alias of the class.
+
+    Returns:
+        Class: A D&D class.
+
+    """
     dnd_class = None
     i = 0
 
@@ -65,6 +94,16 @@ def get_class(alias):
 
 
 def classes_and_levels_builder(classes_and_levels):
+    """Returns the formatted classes and levels string.
+
+    Args:
+        classes_and_levels (list((str, int))): A list of tuples, where one tuple
+            has a value of `(Class.name, level)`.
+
+    Returns:
+        str: Formatted classes and levels string.
+
+    """
     result = ''
 
     for class_and_level in classes_and_levels:
@@ -73,6 +112,6 @@ def classes_and_levels_builder(classes_and_levels):
     return result[:-3]
 
 
-def log_error(error, msg):
+def log_error(error, command):
     print(f'ERROR: {error}')
-    print(f'COMMAND: {msg}')
+    print(f'COMMAND: {command}')
