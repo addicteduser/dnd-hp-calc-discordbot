@@ -12,7 +12,7 @@ token = DISCORD_TOKEN
 
 # for deployment
 # token = os.environ['DISCORD_TOKEN']
-bot = commands.Bot(command_prefix='?',
+bot = commands.Bot(command_prefix='??',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
                    help_command=None)
@@ -62,7 +62,7 @@ async def on_command_error(ctx, error):
 
 
 @bot.command()
-async def help2(ctx):
+async def help(ctx):
     embed = discord.Embed(title="",
                           url="https://github.com/addicteduser/dnd-hp-calc-discordbot",
                           description="Hello, my friend! I am Valron. Below is a guide on how I can help you compute for your AL D&D 5e character's hit points.",
@@ -77,7 +77,7 @@ async def help2(ctx):
     embed.add_field(name="Example",
                     value="`?hp 3 fighter1/barb2/paladin1`",
                     inline=False)
-    embed.add_field(name="Example w/ HP modifiers",
+    embed.add_field(name="Example with HP modifiers",
                     value="`?hp 3 fighter1/barb2/paladin1 tough/hilldwarf`",
                     inline=False)
     embed.set_footer(
@@ -139,7 +139,7 @@ async def links(ctx):
     embed.add_field(name="Find out what's new with me from the support discord server",
                     value="[Click me!](https://discord.gg/waCBQuD)",
                     inline=False)
-    embed.add_field(name="See how I was made from the source code",
+    embed.add_field(name="See how I was made",
                     value="[Click me!](https://github.com/addicteduser/dnd-hp-calc-discordbot)",
                     inline=False)
     embed.add_field(name="Want to support me and my wife?",
