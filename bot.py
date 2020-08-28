@@ -13,7 +13,7 @@ token = DISCORD_TOKEN
 
 # for deployment
 # token = os.environ['DISCORD_TOKEN']
-bot = commands.Bot(command_prefix='??',
+bot = commands.Bot(command_prefix='?',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
                    help_command=None)
@@ -51,7 +51,7 @@ async def on_guild_remove(guild):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
         await ctx.send(f'Oof! {ctx.author.mention}, my friend, something is missing! '
-                       'Check out `?help` for more information. Also, I have a wife!')
+                       'My wife says to use `?help` for more information.')
     if isinstance(error, commands.errors.BadArgument):
         await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modifier?')
 
@@ -153,6 +153,7 @@ async def links(ctx):
 
 @bot.command()
 async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
+    # await ctx.send(get_bot_reply(con_modifier, input_classes_and_levels, input_hp_mods))
     ###############
     ## CONSTANTS ##
     ###############
@@ -204,26 +205,27 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                     current_classes_and_levels.append(
                         (dnd_class.name, matched_level))
 
-                    i = 0
-                    while i < matched_level:
-                        current_level += 1
-                        i += 1
+                    avg_hit_dice = math.floor(dnd_class.hit_die / 2) + 1
 
-                        # if first level: max_hp + con_modifier
-                        if current_level == 1:
-                            current_hp = current_hp + \
-                                dnd_class.hit_die + con_modifier
+                    # For the base class
+                    if current_level == 0:
+                        # On 1st level: max_hit_die + con_modifier
+                        current_hp = current_hp + \
+                            dnd_class.hit_die + con_modifier
+                        # On every level above 1st: avg_hit_dice + con_modifier
+                        current_hp = current_hp + \
+                            ((avg_hit_dice + con_modifier) * (matched_level - 1))
 
-                        # if not first level: avg_hd + con_modifier
-                        else:
-                            avg_hit_dice = math.floor(
-                                dnd_class.hit_die / 2) + 1
-                            current_hp = current_hp + \
-                                avg_hit_dice + con_modifier
+                    # On every level above 1st: avg_hit_dice + con_modifier
+                    else:
+                        current_hp = current_hp + \
+                            ((avg_hit_dice + con_modifier) * matched_level)
 
-                    # if matched_dnd_class is a draconic sorcerer
+                    # If matched_dnd_class is a Draconic Sorcerer
                     if dnd_class.name == 'Draconic Sorcerer':
                         current_hp = current_hp + matched_level
+
+                    current_level = current_level + matched_level
 
                 # If matched_dnd_class does not exist in list of supported D&D classes
                 else:
