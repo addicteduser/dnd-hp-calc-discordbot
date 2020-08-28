@@ -1,4 +1,21 @@
-from dnd_class import Class
+class Class:
+    def __init__(self, name, aliases, hit_die):
+        self.name = name
+        self.aliases = aliases
+        self.hit_die = hit_die
+
+    def get_class(self, alias):
+        """Returns the class given one of its aliases.
+
+        Args:
+            alias (String): An alias of the class.
+
+        Returns:
+            String: The name of the class.
+
+        """
+        if alias in self.aliases:
+            return self
 
 
 def get_classes():
@@ -23,20 +40,22 @@ def get_classes():
     return classes
 
 
-def get_aliases():
-    aliases = []
-    for dnd_class in get_classes():
-        aliases = aliases + dnd_class.aliases
-
-    return aliases
+###############
+## CONSTANTS ##
+###############
+HILLDWARF_MODS = ['hilldwarf', 'hdwarf', 'hd']
+BERSERKER_AXE_MODS = ['berserkeraxe', 'axe', 'ba']
+TOUGH_MODS = ['tough', 't']
+HP_MODS = HILLDWARF_MODS + BERSERKER_AXE_MODS + TOUGH_MODS
+DND_CLASSES = get_classes()
 
 
 def get_class(alias):
     dnd_class = None
     i = 0
 
-    while i < len(get_classes()):
-        dnd_class = get_classes()[i].get_class(alias)
+    while i < len(DND_CLASSES):
+        dnd_class = DND_CLASSES[i].get_class(alias)
         if dnd_class:
             break
         else:
@@ -52,3 +71,8 @@ def classes_and_levels_builder(classes_and_levels):
         result = result + f'{class_and_level[0]} {class_and_level[1]} / '
 
     return result[:-3]
+
+
+def log_error(error, msg):
+    print(f'ERROR: {error}')
+    print(f'COMMAND: {msg}')

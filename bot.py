@@ -56,7 +56,7 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.errors.BadArgument):
         await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modifier?')
 
-    log_error(error, ctx.message.content)
+    helper.log_error(error, ctx.message.content)
 
 
 ##################
@@ -154,16 +154,7 @@ async def links(ctx):
 
 @bot.command()
 async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
-    # await ctx.send(get_bot_reply(con_modifier, input_classes_and_levels, input_hp_mods))
     tic = time.perf_counter()
-    ###############
-    ## CONSTANTS ##
-    ###############
-    dnd_classes = helper.get_aliases()
-    hilldwarf_mods = ['hilldwarf', 'hdwarf', 'hd']
-    berserker_axe_mods = ['berserkeraxe', 'axe', 'ba']
-    tough_mods = ['tough', 't']
-    hp_mods = hilldwarf_mods + berserker_axe_mods + tough_mods
 
     ###########
     ## FLAGS ##
@@ -183,8 +174,6 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
     #########################
     ## BASE HP CALCULATION ##
     #########################
-    # Regex pattern for word##
-    regex = re.compile('([a-zA-Z]+)([0-9]+)')
     # List of word##
     parsed_classes_and_levels = input_classes_and_levels.lower().split('/')
 
@@ -195,6 +184,8 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
             class_and_level = parsed_class_and_level.strip()
 
             # If it follows word## pattern
+            # Regex pattern for word##
+            regex = re.compile('([a-zA-Z]+)([0-9]+)')
             if re.match(regex, class_and_level):
                 result = re.split(regex, class_and_level)
                 matched_dnd_class = result[1]
@@ -233,8 +224,8 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                 else:
                     await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{matched_dnd_class}` class! '
                                    'My wife says to use `?help` for more information.')
-                    log_error(f'Unknown `{dnd_class}` class.',
-                              ctx.message.content)
+                    helper.log_error(f'Unknown `{dnd_class}` class.',
+                                     ctx.message.content)
                     no_error = False
                     break
 
@@ -243,8 +234,8 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                 await ctx.send(f'Oof! {ctx.author.mention}, my friend, kindly check your classes and levels! '
                                'It must look something like this `barb1/wizard2`. '
                                'My wife says to use `?help` for more information.')
-                log_error('Does not follow the classA##/classB##/etc format.',
-                          ctx.message.content)
+                helper.log_error('Does not follow the classA##/classB##/etc format.',
+                                 ctx.message.content)
                 no_error = False
                 break
 
@@ -255,30 +246,30 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
     #############################
     ## HP MODIFIER CALCULATION ##
     #############################
-    # if there are input_hp_mods
+    # If there are input_hp_mods
     if input_hp_mods:
         input_hp_mods = input_hp_mods.lower()
         char_hp_mods = input_hp_mods.split('/')
 
-        # for each char_hp_mod
+        # For each char_hp_mod
         for char_hp_mod in char_hp_mods:
-            # if valid char_hp_mod
-            if char_hp_mod in hp_mods:
-                if char_hp_mod in hilldwarf_mods:
+            # Check if valid char_hp_mod
+            if char_hp_mod in helper.HP_MODS:
+                if char_hp_mod in helper.HILLDWARF_MODS:
                     current_hp = current_hp + current_level
                     is_hilldwarf = True
-                elif char_hp_mod in berserker_axe_mods:
+                elif char_hp_mod in helper.BERSERKER_AXE_MODS:
                     current_hp = current_hp + current_level
                     axe_attuned = True
-                elif char_hp_mod in tough_mods:
+                elif char_hp_mod in helper.TOUGH_MODS:
                     current_hp = current_hp + (current_level * 2)
                     is_tough = True
-            # if not valid char_hp_mod
+            # If not valid char_hp_mod
             else:
                 await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{char_hp_mod}` HP modifier! '
                                'My wife says to use `?help` for more information.')
-                log_error(f'Unknown `{char_hp_mod}` HP modifier.',
-                          ctx.message.content)
+                helper.log_error(f'Unknown `{char_hp_mod}` HP modifier.',
+                                 ctx.message.content)
                 no_error = False
                 break
 
@@ -321,12 +312,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
         await ctx.send(bot_reply)
 
     toc = time.perf_counter()
-    print(f"Downloaded the tutorial in {toc - tic:0.4f} seconds")
-
-
-def log_error(error, msg):
-    print(f'ERROR: {error}')
-    print(f'COMMAND: {msg}')
+    # print(f"Performance: {toc - tic:0.4f} seconds")
 
 
 if __name__ == '__main__':
