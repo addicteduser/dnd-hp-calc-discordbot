@@ -45,6 +45,6 @@ class Class:
             return self.hit_die
 
 
-class1 = Class('Artificer', ['artificer', 'art', 'a'], 8)
-print(class1.get_name('art'))
-print(class1.get_hit_dice('Artificer'))
+# class1 = Class('Artificer', ['artificer', 'art', 'a'], 8)
+# print(class1.get_name('art'))
+# print(class1.get_hit_dice('Artificer'))
