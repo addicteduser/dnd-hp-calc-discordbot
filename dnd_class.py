@@ -18,7 +18,7 @@ class Class:
         self.aliases = aliases
         self.hit_die = hit_die
 
-    def get_name(self, alias):
+    def get_class(self, alias):
         """Returns the name of the class given one of its aliases.
 
         Args:
@@ -29,7 +29,7 @@ class Class:
 
         """
         if alias in self.aliases:
-            return self.name
+            return self
 
     def get_hit_dice(self, name):
         """Returns the hit die value of the class.

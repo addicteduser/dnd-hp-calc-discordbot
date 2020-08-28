@@ -23,21 +23,39 @@ def get_classes():
     return classes
 
 
-def get_class_name(alias):
-    not_found = True
-    class_name = None
+def get_aliases():
+    aliases = []
+    for dnd_class in get_classes():
+        aliases = aliases + dnd_class.aliases
+
+    return aliases
+
+
+def get_class(alias):
+    dnd_class = None
     i = 0
 
-    while not_found:
-        dnd_class = get_classes()[i]
-        class_name = dnd_class.get_name(alias)
-        if class_name:
-            not_found = False
+    while i < len(get_classes()):
+        dnd_class = get_classes()[i].get_class(alias)
+        if dnd_class:
+            break
         else:
             i += 1
 
-    return class_name
+    return dnd_class
 
 
-print(get_class_name('ds'))
-# print(get_classes()[0].name)
+def classes_and_levels_builder(classes_and_levels):
+    result = ''
+
+    for class_and_level in classes_and_levels:
+        result = result + f'{class_and_level[0]} {class_and_level[1]} / '
+
+    return result[:-3]
+
+
+# a = ('Paladin', 3)
+# x = ('Barbarian', 1)
+# y = ('Wizard', 2)
+# z = [a, x, y]
+# print(classes_and_levels_builder(z))

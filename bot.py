@@ -5,6 +5,7 @@ import discord
 import typing
 from discord.ext import commands
 from discord.utils import get
+import helper
 
 # for local development
 from secrets import DISCORD_TOKEN
@@ -153,92 +154,137 @@ async def links(ctx):
 
 @bot.command()
 async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
-    dnd_classes = ['artificer', 'art', 'a',
-                   'barbarian', 'barb', 'bb', 'bard', 'bd',
-                   'cleric', 'cl', 'c', 'druid', 'dr', 'd',
-                   'fighter', 'fight', 'f', 'monk', 'mk', 'm',
-                   'paladin', 'pally', 'p',
-                   'ranger', 'ra', 'rogue', 'ro',
-                   'sorcerer', 'sorc', 's',
-                   'draconicsorcerer', 'draconicsorc', 'dracsorc', 'ds',
-                   'warlock', 'lock', 'wr', 'wizard', 'wiz', 'wz']
+    ###############
+    ## CONSTANTS ##
+    ###############
+    dnd_classes = helper.get_aliases()
     hilldwarf_mods = ['hilldwarf', 'hdwarf', 'hd']
     berserker_axe_mods = ['berserkeraxe', 'axe', 'ba']
     tough_mods = ['tough', 't']
     hp_mods = hilldwarf_mods + berserker_axe_mods + tough_mods
 
-    # flags
+    ###########
+    ## FLAGS ##
+    ###########
     no_error = True
     is_hilldwarf = False
     axe_attuned = False
     is_tough = False
 
-    # character stats
+    #####################
+    ## CHARACTER STATS ##
+    #####################
     current_level = 0
     current_hp = 0
+    current_classes_and_levels = []
 
+    #########################
+    ## BASE HP CALCULATION ##
+    #########################
+    # Regex pattern for word##
     regex = re.compile('([a-zA-Z]+)([0-9]+)')
-    input_classes_and_levels = input_classes_and_levels.lower()
-    char_classes = input_classes_and_levels.split('/')
+    # List of word##
+    parsed_classes_and_levels = input_classes_and_levels.lower().split('/')
 
-    # if there are char_classes
-    if char_classes:
-        # for each char_class
-        for char_class in char_classes:
-            class_and_level = char_class.strip()
+    # If there are parsed_classes_and_levels
+    if parsed_classes_and_levels:
+        # Compute for the HP of each class
+        for parsed_class_and_level in parsed_classes_and_levels:
+            class_and_level = parsed_class_and_level.strip()
             match = re.match(regex, class_and_level)
 
-            # if follows word## pattern
+            # If it follows word## pattern
             if match:
                 result = re.split(regex, class_and_level)
-                dnd_class = result[1]
-                level = int(result[2])
+                matched_dnd_class = result[1]
+                matched_level = int(result[2])
 
-                # if dnd_class is in list of dnd_classes
-                if dnd_class in dnd_classes:
+                # If matched_dnd_class exists in list of supported D&D classes
+                dnd_class = helper.get_class(matched_dnd_class)
+                if dnd_class:
+                    # Track class name and level
+                    current_classes_and_levels.append(
+                        (dnd_class.name, matched_level))
+
                     i = 0
-                    while i < level:
+                    while i < matched_level:
                         current_level += 1
                         i += 1
 
                         # if first level: max_hp + con_modifier
                         if current_level == 1:
                             current_hp = current_hp + \
-                                get_hit_dice(dnd_class) + con_modifier
+                                dnd_class.hit_die + con_modifier
 
                         # if not first level: avg_hd + con_modifier
                         else:
                             avg_hit_dice = math.floor(
-                                get_hit_dice(dnd_class) / 2) + 1
+                                dnd_class.hit_die / 2) + 1
                             current_hp = current_hp + \
                                 avg_hit_dice + con_modifier
 
-                    # if dnd_class is a draconic sorcerer
-                    if (dnd_class == 'draconicsorcerer' or dnd_class == 'draconicsorc' or dnd_class == 'dracsorc' or dnd_class == 'ds'):
-                        current_hp = current_hp + level
+                    # if matched_dnd_class is a draconic sorcerer
+                    if dnd_class.name == 'Draconic Sorcerer':
+                        current_hp = current_hp + matched_level
 
-                # if dnd_class does not exist
+                # if matched_dnd_class does not exist in list of supported D&D classes
                 else:
-                    await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{dnd_class}` class! '
-                                   'Check out `?help` for more information. Also, I have a wife!')
+                    await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{matched_dnd_class}` class! '
+                                   'My wife says to use `?help` for more information.')
                     log_error(f'Unknown `{dnd_class}` class.',
                               ctx.message.content)
                     no_error = False
                     break
 
+                # # if dnd_class is in list of dnd_classes
+                # if matched_dnd_class in dnd_classes:
+                #     i = 0
+                #     while i < matched_level:
+                #         current_level += 1
+                #         i += 1
+                #
+                #         # if first level: max_hp + con_modifier
+                #         if current_level == 1:
+                #             current_hp = current_hp + \
+                #                 get_hit_dice(dnd_class) + con_modifier
+                #
+                #         # if not first level: avg_hd + con_modifier
+                #         else:
+                #             avg_hit_dice = math.floor(
+                #                 get_hit_dice(dnd_class) / 2) + 1
+                #             current_hp = current_hp + \
+                #                 avg_hit_dice + con_modifier
+                #
+                #     # if dnd_class is a draconic sorcerer
+                #     if (matched_dnd_class == 'draconicsorcerer' or matched_dnd_class == 'draconicsorc' or matched_dnd_class == 'dracsorc' or matched_dnd_class == 'ds'):
+                #         current_hp = current_hp + matched_level
+                #
+                # # if dnd_class does not exist
+                # else:
+                #     await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{dnd_class}` class! '
+                #                    'Check out `?help` for more information. Also, I have a wife!')
+                #     log_error(f'Unknown `{dnd_class}` class.',
+                #               ctx.message.content)
+                #     no_error = False
+                #     break
+
             # if does not follows word## pattern
             else:
-                await ctx.send(f'Oof! {ctx.author.mention}, my friend, double check your classes and levels (example `barb1/wiz3`)! '
-                               'Check out `?help` for more information. Also, I have a wife!')
+                await ctx.send(f'Oof! {ctx.author.mention}, my friend, kindly check your classes and levels! '
+                               'It must look like this `barb1/wizard2`. '
+                               'My wife says to use `?help` for more information')
                 log_error('Does not follow the classA##/classB##/etc format.',
                           ctx.message.content)
                 no_error = False
                 break
 
-    # if no char_classes
+    # if no parsed_classes_and_levels
     else:
         raise commands.MissingRequiredArgument
 
+    #############################
+    ## HP MODIFIER CALCULATION ##
+    #############################
     # if there are input_hp_mods
     if input_hp_mods:
         input_hp_mods = input_hp_mods.lower()
@@ -266,25 +312,30 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                 no_error = False
                 break
 
+    #######################
+    ## BOT REPLY BUILDER ##
+    #######################
     if no_error:
         if current_level > 20:
-            bot_reply = f'Oof! {ctx.author.mention}, my friend, you have a level `{current_level}` character? My wife says to double check its levels! But if you really want to know, a '
+            bot_reply = f'Oof! {ctx.author.mention}, my friend, you have a level `{current_level}` character? '
+            'My wife says to double check its levels! But if you really want to know, a '
         else:
             bot_reply = f'{ctx.author.mention}, my friend, a '
 
         if is_hilldwarf:
-            bot_reply = bot_reply + '`hilldwarf` '
+            bot_reply = bot_reply + '`Hill Dwarf` '
 
-        bot_reply = bot_reply + f'`{input_classes_and_levels}` character '
+        bot_reply = bot_reply + \
+            f'`{helper.classes_and_levels_builder(current_classes_and_levels)}` character '
 
         if axe_attuned:
-            bot_reply = bot_reply + '`attuned to a berserker axe` '
+            bot_reply = bot_reply + '`attuned to a Berserker Axe` '
 
         bot_reply = bot_reply + \
             f'with a Constitution modifier of `{con_modifier}` '
 
         if is_tough:
-            bot_reply = bot_reply + 'and `tough feat` '
+            bot_reply = bot_reply + 'and `Tough feat` '
 
         bot_reply = bot_reply + f'has `{current_hp}` hit points.'
 
@@ -294,40 +345,15 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
             bot_reply = bot_reply + '\n\nOof! You have a negative Constitution modifier! ' + \
                 f'My wife tells me that I should summon {summon.mention}!'
 
+        ####################
+        ## SEND BOT REPLY ##
+        ####################
         await ctx.send(bot_reply)
-
-    # reset values
-    no_error = True
-    is_hilldwarf = False
-    axe_attuned = False
-    is_tough = False
-    current_level = 1
-    current_hp = 0
 
 
 def log_error(error, msg):
     print(f'ERROR: {error}')
     print(f'COMMAND: {msg}')
-
-
-def get_hit_dice(dnd_class):
-    switcher = {
-        'artificer': 8, 'art': 8, 'a': 8,
-        'barbarian': 12, 'barb': 12, 'bb': 12,
-        'bard': 8, 'bd': 8,
-        'cleric': 8, 'cl': 8, 'c': 8,
-        'druid': 8, 'dr': 8, 'd': 8,
-        'fighter': 10, 'fight': 10, 'f': 10,
-        'monk': 8, 'mk': 8, 'm': 8,
-        'paladin': 10, 'pally': 10, 'p': 10,
-        'ranger': 10, 'ra': 10,
-        'rogue': 8, 'ro': 8,
-        'sorcerer': 6, 'sorc': 6, 's': 6,
-        'draconicsorcerer': 6, 'draconicsorc': 6, 'dracsorc': 6, 'ds': 6,
-        'warlock': 8, 'lock': 8, 'wr': 8,
-        'wizard': 6, 'wiz': 6, 'wz': 6
-    }
-    return switcher.get(dnd_class, 0)
 
 
 if __name__ == '__main__':
