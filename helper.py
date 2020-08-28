@@ -52,10 +52,3 @@ def classes_and_levels_builder(classes_and_levels):
         result = result + f'{class_and_level[0]} {class_and_level[1]} / '
 
     return result[:-3]
-
-
-# a = ('Paladin', 3)
-# x = ('Barbarian', 1)
-# y = ('Wizard', 2)
-# z = [a, x, y]
-# print(classes_and_levels_builder(z))
