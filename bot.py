@@ -37,6 +37,11 @@ async def on_ready():
 
     print(f'Connected to {len(bot.guilds)} Discord servers!')
 
+    activity = discord.Activity(
+        name=f'D&D 5e in {len(bot.guilds)} guilds | ?help',
+        type=discord.ActivityType.playing)
+    await bot.change_presence(activity=activity)
+
 
 #########################
 ## DISCORD BOT LOGGING ##
@@ -54,11 +59,11 @@ async def on_guild_remove(guild):
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await bot_typing(ctx, 3)
+        await bot_typing(ctx, 2)
         await ctx.send(f'Oof! {ctx.author.mention}, my friend, something is missing! '
                        'My wife says to use `?help` for more information.')
     if isinstance(error, commands.errors.BadArgument):
-        await bot_typing(ctx, 3)
+        await bot_typing(ctx, 2)
         await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modifier?')
 
     helper.log_error(error, ctx.message.content)
@@ -89,7 +94,7 @@ async def help(ctx):
     embed.set_footer(
         text='?options - to see the list of supported classes and HP modifiers\n'
              '?links - to view some helpful links')
-    await bot_typing(ctx, 3)
+    await bot_typing(ctx, 2)
     await ctx.send(embed=embed)
 
 
@@ -127,7 +132,7 @@ async def options(ctx):
     embed.set_footer(
         text='?help - main help command\n'
              '?links - to view some helpful links')
-    await bot_typing(ctx, 3)
+    await bot_typing(ctx, 2)
     await ctx.send(embed=embed)
 
 
@@ -156,7 +161,7 @@ async def links(ctx):
     embed.set_footer(
         text='?help - main help command\n'
              '?options - to see the list of supported classes and HP modifiers')
-    await bot_typing(ctx, 3)
+    await bot_typing(ctx, 2)
     await ctx.send(embed=embed)
 
 
@@ -230,7 +235,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
 
                 # If matched_dnd_class does not exist in list of supported D&D classes
                 else:
-                    await bot_typing(ctx, 3)
+                    await bot_typing(ctx, 2)
                     await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{matched_dnd_class}` class! '
                                    'My wife says to use `?help` for more information.')
                     helper.log_error(f'Unknown `{dnd_class}` class.',
@@ -240,7 +245,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
 
             # If it does not follow word## pattern
             else:
-                await bot_typing(ctx, 3)
+                await bot_typing(ctx, 2)
                 await ctx.send(f'Oof! {ctx.author.mention}, my friend, kindly check your classes and levels! '
                                'It must look something like this `barb1/wizard2`. '
                                'My wife says to use `?help` for more information.')
@@ -276,7 +281,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
                     is_tough = True
             # If not valid char_hp_mod
             else:
-                await bot_typing(ctx, 3)
+                await bot_typing(ctx, 2)
                 await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{char_hp_mod}` HP modifier! '
                                'My wife says to use `?help` for more information.')
                 helper.log_error(f'Unknown `{char_hp_mod}` HP modifier.',
@@ -320,7 +325,7 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
         ####################
         ## SEND BOT REPLY ##
         ####################
-        await bot_typing(ctx, 3)
+        await bot_typing(ctx, 2)
         await ctx.send(bot_reply)
 
     toc = time.perf_counter()
