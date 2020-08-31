@@ -112,12 +112,24 @@ def classes_and_levels_builder(classes_and_levels):
     return result[:-3]
 
 
-def alias_builder():
-    result = ''
+def get_dnd_aliases():
+    aliases = []
 
     for dnd_class in DND_CLASSES:
-        result = result + f'- `{dnd_class.aliases[0]}` ('
-        aliases = dnd_class.aliases
+        aliases.append(dnd_class.aliases)
+
+    return aliases
+
+
+def get_hp_mod_aliases():
+    return [HILLDWARF_MODS, BERSERKER_AXE_MODS, TOUGH_MODS]
+
+
+def alias_builder(alias_list):
+    result = ''
+
+    for aliases in alias_list:
+        result = result + f'- `{aliases[0]}` ('
         aliases.pop(0)
         for alias in aliases:
             result = result + f'`{alias}`, '

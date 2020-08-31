@@ -17,7 +17,7 @@ token = DISCORD_TOKEN
 
 # for deployment
 # token = os.environ['DISCORD_TOKEN']
-bot = commands.Bot(command_prefix='??',
+bot = commands.Bot(command_prefix='?',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
                    help_command=None)
@@ -109,12 +109,10 @@ async def options(ctx):
                      icon_url="https://i.imgur.com/0bByXQ4.png")
     embed.set_thumbnail(url="https://i.imgur.com/0bByXQ4.png")
     embed.add_field(name="List of supported classes",
-                    value=helper.alias_builder(),
+                    value=helper.alias_builder(helper.get_dnd_aliases()),
                     inline=False)
     embed.add_field(name="List of supported HP modifiers",
-                    value='- `hilldwarf` (`hdwarf`, `hd`)\n'
-                          '- `berserkeraxe` (`axe`, `ba`)\n'
-                          '- `tough` (`t`)',
+                    value=helper.alias_builder(helper.get_hp_mod_aliases()),
                     inline=False)
     embed.set_footer(
         text='?help - main help command\n'
