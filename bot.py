@@ -17,7 +17,7 @@ token = DISCORD_TOKEN
 
 # for deployment
 # token = os.environ['DISCORD_TOKEN']
-bot = commands.Bot(command_prefix='?',
+bot = commands.Bot(command_prefix='??',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
                    help_command=None)
@@ -109,20 +109,7 @@ async def options(ctx):
                      icon_url="https://i.imgur.com/0bByXQ4.png")
     embed.set_thumbnail(url="https://i.imgur.com/0bByXQ4.png")
     embed.add_field(name="List of supported classes",
-                    value='- `artificer` (`art`, `a`)\n'
-                          '- `barbarian` (`barb`, `bb`)\n'
-                          '- `bard` (`bd`)\n'
-                          '- `cleric` (`cl`, `c`)\n'
-                          '- `druid` (`dr`, `d`)\n'
-                          '- `fighter` (`fight`, `f`)\n'
-                          '- `monk` (`mk`, `m`)\n'
-                          '- `paladin` (`pally`, `p`)\n'
-                          '- `ranger` (`ra`)\n'
-                          '- `rogue` (`ro`)\n'
-                          '- `sorcerer` (`sorc`, `s`)\n'
-                          '- `draconicsorcerer` (`draconicsorc`, `dracsorc`, `ds`)\n'
-                          '- `warlock` (`lock`, `wr`)\n'
-                          '- `wizard` (`wiz`, `wz`)',
+                    value=helper.alias_builder(),
                     inline=False)
     embed.add_field(name="List of supported HP modifiers",
                     value='- `hilldwarf` (`hdwarf`, `hd`)\n'

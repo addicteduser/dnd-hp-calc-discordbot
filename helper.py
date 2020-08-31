@@ -48,7 +48,7 @@ def get_classes():
     classes.append(Class('Druid', ['druid', 'dr', 'd'], 8))
     classes.append(Class('Fighter', ['fighter', 'fight', 'f'], 10))
     classes.append(Class('Monk', ['monk', 'mk', 'm'], 8))
-    classes.append(Class('Paladin', ['paladin', 'pally', 'p'], 10))
+    classes.append(Class('Paladin', ['paladin', 'pal', 'p'], 10))
     classes.append(Class('Ranger', ['ranger', 'ra'], 10))
     classes.append(Class('Rogue', ['rogue', 'ro'], 8))
     classes.append(Class('Sorcerer', ['sorcerer', 'sorc', 's'], 6))
@@ -110,6 +110,21 @@ def classes_and_levels_builder(classes_and_levels):
         result = result + f'{class_and_level[0]} {class_and_level[1]} / '
 
     return result[:-3]
+
+
+def alias_builder():
+    result = ''
+
+    for dnd_class in DND_CLASSES:
+        result = result + f'- `{dnd_class.aliases[0]}` ('
+        aliases = dnd_class.aliases
+        aliases.pop(0)
+        for alias in aliases:
+            result = result + f'`{alias}`, '
+
+        result = result[:-2] + ')\n'
+
+    return result[:-1]
 
 
 def log_error(error, command):
