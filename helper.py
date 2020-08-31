@@ -60,14 +60,19 @@ def get_classes():
     return classes
 
 
-###############
-## CONSTANTS ##
-###############
-HILLDWARF_MODS = ['hilldwarf', 'hdwarf', 'hd']
-BERSERKER_AXE_MODS = ['berserkeraxe', 'axe', 'ba']
-TOUGH_MODS = ['tough', 't']
-HP_MODS = HILLDWARF_MODS + BERSERKER_AXE_MODS + TOUGH_MODS
-DND_CLASSES = get_classes()
+def get_dnd_aliases():
+    """Returns the list of alias lists per D&D class.
+
+    Returns:
+        list(list(str)): The list of alias lists per D&D class.
+
+    """
+    aliases = []
+
+    for dnd_class in get_classes():
+        aliases.append(dnd_class.aliases)
+
+    return aliases
 
 
 def get_class(alias):
@@ -94,7 +99,7 @@ def get_class(alias):
 
 
 def classes_and_levels_builder(classes_and_levels):
-    """Returns the formatted classes and levels string.
+    """Returns the formatted classes and levels string for the bot reply.
 
     Args:
         classes_and_levels (list((str, int))): A list of tuples, where one tuple
@@ -112,20 +117,16 @@ def classes_and_levels_builder(classes_and_levels):
     return result[:-3]
 
 
-def get_dnd_aliases():
-    aliases = []
-
-    for dnd_class in DND_CLASSES:
-        aliases.append(dnd_class.aliases)
-
-    return aliases
-
-
-def get_hp_mod_aliases():
-    return [HILLDWARF_MODS, BERSERKER_AXE_MODS, TOUGH_MODS]
-
-
 def alias_builder(alias_list):
+    """Returns the formatted alias list for the bot reply.
+
+    Args:
+        alias_list (list(list(str))): The list of alias lists.
+
+    Returns:
+        str: Formatted alias list string.
+
+    """
     result = ''
 
     for aliases in alias_list:
