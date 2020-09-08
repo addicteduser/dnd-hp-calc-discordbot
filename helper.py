@@ -1,3 +1,7 @@
+import discord
+import constants
+
+
 class Class:
     """Represents a D&D class.
 
@@ -30,6 +34,10 @@ class Class:
         """
         if alias in self.aliases:
             return self
+
+###################
+## DATA BUILDERS ##
+###################
 
 
 def get_classes():
@@ -69,35 +77,19 @@ def get_dnd_aliases():
     """
     aliases = []
 
-    for dnd_class in get_classes():
+    for dnd_class in DND_CLASSES:
         aliases.append(dnd_class.aliases)
 
     return aliases
 
 
-def get_class(alias):
-    """Returns the D&D class given an alias.
-
-    Args:
-        alias (str): An alias of the class.
-
-    Returns:
-        Class: A D&D class.
-
-    """
-    dnd_class = None
-    i = 0
-
-    while i < len(DND_CLASSES):
-        dnd_class = DND_CLASSES[i].get_class(alias)
-        if dnd_class:
-            break
-        else:
-            i += 1
-
-    return dnd_class
+DND_CLASSES = get_classes()
+CLASS_ALIASES = get_dnd_aliases()
 
 
+####################
+## STRING BUILDER ##
+####################
 def classes_and_levels_builder(classes_and_levels):
     """Returns the formatted classes and levels string for the bot reply.
 
@@ -138,6 +130,60 @@ def alias_builder(alias_list):
         result = result[:-2] + ')\n'
 
     return result[:-1]
+
+
+def valron_doesnt_know(ctx, the_thing):
+    return (f'Oof! {ctx.author.mention}, my friend, I don\'t know the {the_thing}! ' +
+            'My wife says to use `?options` to see your classes or HP modifier options or `?help` for more information.')
+
+
+###################
+## OTHER HELPERS ##
+###################
+def get_class(alias):
+    """Returns the D&D class given an alias.
+
+    Args:
+        alias (str): An alias of the class.
+
+    Returns:
+        Class: A D&D class.
+
+    """
+    dnd_class = None
+    i = 0
+
+    while i < len(DND_CLASSES):
+        dnd_class = DND_CLASSES[i].get_class(alias)
+        if dnd_class:
+            break
+        else:
+            i += 1
+
+    return dnd_class
+
+
+def embed_builder(valron, description):
+    """Return the base embed.
+
+    Args:
+        valron (str): The bot's name.
+        description (str): The `description` field of the embed.
+
+    Returns:
+        discord.Embed: A discord Embed.
+
+    """
+    embed = discord.Embed(title='',
+                          url=constants.TOP_GG_LINK,
+                          description=description,
+                          color=0x1abc9c)
+    embed.set_author(name=f'{valron}',
+                     url=constants.TOP_GG_LINK,
+                     icon_url=f'{constants.IMG_LINK}')
+    embed.set_thumbnail(url=f'{constants.IMG_LINK}')
+
+    return embed
 
 
 def log_error(error, command):
