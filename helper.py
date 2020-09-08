@@ -1,3 +1,7 @@
+import discord
+import constants
+
+
 class Class:
     """Represents a D&D class.
 
@@ -31,6 +35,10 @@ class Class:
         if alias in self.aliases:
             return self
 
+###################
+## DATA BUILDERS ##
+###################
+
 
 def get_classes():
     """Returns the list of possible D&D classes.
@@ -48,7 +56,7 @@ def get_classes():
     classes.append(Class('Druid', ['druid', 'dr', 'd'], 8))
     classes.append(Class('Fighter', ['fighter', 'fight', 'f'], 10))
     classes.append(Class('Monk', ['monk', 'mk', 'm'], 8))
-    classes.append(Class('Paladin', ['paladin', 'pally', 'p'], 10))
+    classes.append(Class('Paladin', ['paladin', 'pal', 'p'], 10))
     classes.append(Class('Ranger', ['ranger', 'ra'], 10))
     classes.append(Class('Rogue', ['rogue', 'ro'], 8))
     classes.append(Class('Sorcerer', ['sorcerer', 'sorc', 's'], 6))
@@ -60,14 +68,82 @@ def get_classes():
     return classes
 
 
-###############
-## CONSTANTS ##
-###############
-HILLDWARF_MODS = ['hilldwarf', 'hdwarf', 'hd']
-BERSERKER_AXE_MODS = ['berserkeraxe', 'axe', 'ba']
-TOUGH_MODS = ['tough', 't']
-HP_MODS = HILLDWARF_MODS + BERSERKER_AXE_MODS + TOUGH_MODS
+def get_dnd_aliases():
+    """Returns the list of alias lists per D&D class.
+
+    Returns:
+        list(list(str)): The list of alias lists per D&D class.
+
+    """
+    aliases = []
+
+    for dnd_class in DND_CLASSES:
+        aliases.append(dnd_class.aliases)
+
+    return aliases
+
+
 DND_CLASSES = get_classes()
+CLASS_ALIASES = get_dnd_aliases()
+
+
+####################
+## STRING BUILDER ##
+####################
+def classes_and_levels_builder(classes_and_levels):
+    """Returns the formatted classes and levels string for the bot reply.
+
+    Args:
+        classes_and_levels (list((str, int))): A list of tuples, where one tuple
+            has a value of `(Class.name, level)`.
+
+    Returns:
+        str: Formatted classes and levels string.
+
+    """
+    result = ''
+
+    for class_and_level in classes_and_levels:
+        result = result + f'{class_and_level[0]} {class_and_level[1]} / '
+
+    return result[:-3]
+
+
+def alias_builder(alias_list):
+    """Returns the formatted alias list for the bot reply.
+
+    Args:
+        alias_list (list(list(str))): The list of alias lists.
+
+    Returns:
+        str: Formatted alias list string.
+
+    """
+    result = ''
+
+    for aliases in alias_list:
+        result = result + f'- `{aliases[0]}` ('
+        aliases.pop(0)
+        for alias in aliases:
+            result = result + f'`{alias}`, '
+
+        result = result[:-2] + ')\n'
+
+    return result[:-1]
+
+
+def valron_doesnt_know(ctx, the_thing):
+    return (f'Oof! {ctx.author.mention}, my friend, I don\'t know the {the_thing}! '
+            + 'My wife says to use `?options` to see your classes or HP modifier options or `?help` for more information.')
+
+
+###################
+## OTHER HELPERS ##
+###################
+def update_guild_counter(num_guilds):
+    return discord.Activity(
+        name=f'D&D 5e in {num_guilds} guilds | ?help',
+        type=discord.ActivityType.playing)
 
 
 def get_class(alias):
@@ -93,23 +169,27 @@ def get_class(alias):
     return dnd_class
 
 
-def classes_and_levels_builder(classes_and_levels):
-    """Returns the formatted classes and levels string.
+def embed_builder(valron, description):
+    """Return the base embed.
 
     Args:
-        classes_and_levels (list((str, int))): A list of tuples, where one tuple
-            has a value of `(Class.name, level)`.
+        valron (str): The bot's name.
+        description (str): The `description` field of the embed.
 
     Returns:
-        str: Formatted classes and levels string.
+        discord.Embed: A discord Embed.
 
     """
-    result = ''
+    embed = discord.Embed(title='',
+                          url=constants.TOP_GG_LINK,
+                          description=description,
+                          color=0x1abc9c)
+    embed.set_author(name=f'{valron}',
+                     url=constants.TOP_GG_LINK,
+                     icon_url=f'{constants.IMG_LINK}')
+    embed.set_thumbnail(url=f'{constants.IMG_LINK}')
 
-    for class_and_level in classes_and_levels:
-        result = result + f'{class_and_level[0]} {class_and_level[1]} / '
-
-    return result[:-3]
+    return embed
 
 
 def log_error(error, command):

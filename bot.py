@@ -5,7 +5,9 @@ import discord
 import typing
 import time
 import asyncio
+
 import helper
+import constants
 
 from discord.ext import commands
 from discord.utils import get
@@ -36,11 +38,7 @@ async def on_ready():
     #     print(f' >> {guild.name}')
 
     print(f'Connected to {len(bot.guilds)} Discord servers!')
-
-    activity = discord.Activity(
-        name=f'D&D 5e in {len(bot.guilds)} guilds | ?help',
-        type=discord.ActivityType.playing)
-    await bot.change_presence(activity=activity)
+    await bot.change_presence(activity=helper.update_guild_counter(len(bot.guilds)))
 
 
 #########################
@@ -49,22 +47,25 @@ async def on_ready():
 @bot.event
 async def on_guild_join(guild):
     print(f'Joined {guild.name}!')
+    await bot.change_presence(activity=helper.update_guild_counter(len(bot.guilds)))
 
 
 @bot.event
 async def on_guild_remove(guild):
     print(f'Left {guild.name}...')
+    await bot.change_presence(activity=helper.update_guild_counter(len(bot.guilds)))
 
 
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.errors.MissingRequiredArgument):
-        await bot_typing(ctx, 2)
+        await bot_typing(ctx, 1)
         await ctx.send(f'Oof! {ctx.author.mention}, my friend, something is missing! '
                        'My wife says to use `?help` for more information.')
     if isinstance(error, commands.errors.BadArgument):
-        await bot_typing(ctx, 2)
-        await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modifier?')
+        await bot_typing(ctx, 1)
+        await ctx.send(f'Oof! {ctx.author.mention}, my friend, what is the constitution modifier?'
+                       'My wife says to use `?help` for more information.')
 
     helper.log_error(error, ctx.message.content)
 
@@ -74,18 +75,15 @@ async def on_command_error(ctx, error):
 ##################
 @bot.command()
 async def help(ctx):
-    embed = discord.Embed(title="",
-                          url="https://github.com/addicteduser/dnd-hp-calc-discordbot",
-                          description="Hello, my friend! I am Valron. Below is a guide on how I can help you compute for your AL D&D 5e character's hit points.",
-                          color=0x1abc9c)
-    embed.set_author(name="Valron the HP Calculator",
-                     url="https://github.com/addicteduser/dnd-hp-calc-discordbot",
-                     icon_url="https://i.imgur.com/0bByXQ4.png")
-    embed.set_thumbnail(url="https://i.imgur.com/0bByXQ4.png")
+    embed = helper.embed_builder(
+        bot.user.name, "Hello, my friend! I am Valron. Below is a guide on how I can help you compute for your AL D&D 5e character's hit points.")
     embed.add_field(name="Command",
                     value="`?hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`",
                     inline=False)
-    embed.add_field(name="Example",
+    embed.add_field(name="Single Class Example",
+                    value="`?hp 3 fighter1`",
+                    inline=False)
+    embed.add_field(name="Multiclass Example",
                     value="`?hp 3 fighter1/barb2/paladin1`",
                     inline=False)
     embed.add_field(name="Example with HP modifiers",
@@ -94,80 +92,53 @@ async def help(ctx):
     embed.set_footer(
         text='?options - to see the list of supported classes and HP modifiers\n'
              '?links - to view some helpful links')
-    await bot_typing(ctx, 2)
+    await bot_typing(ctx, 1)
     await ctx.send(embed=embed)
 
 
 @bot.command()
 async def options(ctx):
-    embed = discord.Embed(title="",
-                          url="https://github.com/addicteduser/dnd-hp-calc-discordbot",
-                          description="Hello, my friend! I am Valron. Here are the supported classes and HP modifiers for your reference.",
-                          color=0x1abc9c)
-    embed.set_author(name="Valron the HP Calculator",
-                     url="https://github.com/addicteduser/dnd-hp-calc-discordbot",
-                     icon_url="https://i.imgur.com/0bByXQ4.png")
-    embed.set_thumbnail(url="https://i.imgur.com/0bByXQ4.png")
+    embed = helper.embed_builder(
+        bot.user.name, 'Hello, my friend! I am Valron. Here are the supported classes and HP modifiers for your reference.')
     embed.add_field(name="List of supported classes",
-                    value='- `artificer` (`art`, `a`)\n'
-                          '- `barbarian` (`barb`, `bb`)\n'
-                          '- `bard` (`bd`)\n'
-                          '- `cleric` (`cl`, `c`)\n'
-                          '- `druid` (`dr`, `d`)\n'
-                          '- `fighter` (`fight`, `f`)\n'
-                          '- `monk` (`mk`, `m`)\n'
-                          '- `paladin` (`pally`, `p`)\n'
-                          '- `ranger` (`ra`)\n'
-                          '- `rogue` (`ro`)\n'
-                          '- `sorcerer` (`sorc`, `s`)\n'
-                          '- `draconicsorcerer` (`draconicsorc`, `dracsorc`, `ds`)\n'
-                          '- `warlock` (`lock`, `wr`)\n'
-                          '- `wizard` (`wiz`, `wz`)',
+                    value=helper.alias_builder(helper.CLASS_ALIASES),
                     inline=False)
     embed.add_field(name="List of supported HP modifiers",
-                    value='- `hilldwarf` (`hdwarf`, `hd`)\n'
-                          '- `berserkeraxe` (`axe`, `ba`)\n'
-                          '- `tough` (`t`)',
+                    value=helper.alias_builder(constants.HP_MOD_ALIASES),
                     inline=False)
     embed.set_footer(
         text='?help - main help command\n'
              '?links - to view some helpful links')
-    await bot_typing(ctx, 2)
+    await bot_typing(ctx, 1)
     await ctx.send(embed=embed)
 
 
 @bot.command()
 async def links(ctx):
-    embed = discord.Embed(title="",
-                          url="https://github.com/addicteduser/dnd-hp-calc-discordbot",
-                          description="Hello, my friend! I am Valron. My wife has compiled a list of helpful links for you.",
-                          color=0x1abc9c)
-    embed.set_author(name="Valron the HP Calculator",
-                     url="https://github.com/addicteduser/dnd-hp-calc-discordbot",
-                     icon_url="https://i.imgur.com/0bByXQ4.png")
-    embed.set_thumbnail(url="https://i.imgur.com/0bByXQ4.png")
+    embed = helper.embed_builder(
+        bot.user.name, 'Hello, my friend! I am Valron. My wife has compiled a list of helpful links for you.')
     embed.add_field(name="Invite me to your server with this link",
-                    value="[Click me!](https://discordapp.com/api/oauth2/authorize?client_id=666625461811413008&permissions=11264&scope=bot)",
+                    value=f'[Click me!]({constants.DISCORD_INVITE_LINK})',
                     inline=False)
     embed.add_field(name="Find out what's new with me from the support discord server",
-                    value="[Click me!](https://discord.gg/waCBQuD)",
+                    value=f'[Click me!]({constants.SUPPORT_SERVER_LINK})',
                     inline=False)
     embed.add_field(name="See how I was made",
-                    value="[Click me!](https://github.com/addicteduser/dnd-hp-calc-discordbot)",
+                    value=f'[Click me!]({constants.GITHUB_LINK})',
                     inline=False)
     embed.add_field(name="Want to support me and my wife?",
-                    value="[Click me!](https://paypal.me/addicteduser)",
+                    value=f'Click these: [PayPal]({constants.PAYPAL_LINK}) | [Ko-Fi]({constants.KOFI_LINK})',
                     inline=False)
     embed.set_footer(
         text='?help - main help command\n'
              '?options - to see the list of supported classes and HP modifiers')
-    await bot_typing(ctx, 2)
+    await bot_typing(ctx, 1)
     await ctx.send(embed=embed)
 
 
 @bot.command()
 async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
-    tic = time.perf_counter()
+    # tic = time.perf_counter()
 
     ###########
     ## FLAGS ##
@@ -235,17 +206,17 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
 
                 # If matched_dnd_class does not exist in list of supported D&D classes
                 else:
-                    await bot_typing(ctx, 2)
-                    await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{matched_dnd_class}` class! '
-                                   'My wife says to use `?help` for more information.')
-                    helper.log_error(f'Unknown `{dnd_class}` class.',
+                    await bot_typing(ctx, 1)
+                    unknown = f'`{matched_dnd_class}` class'
+                    await ctx.send((helper.valron_doesnt_know(ctx, unknown)))
+                    helper.log_error(f'Unknown {unknown}.',
                                      ctx.message.content)
                     no_error = False
                     break
 
             # If it does not follow word## pattern
             else:
-                await bot_typing(ctx, 2)
+                await bot_typing(ctx, 1)
                 await ctx.send(f'Oof! {ctx.author.mention}, my friend, kindly check your classes and levels! '
                                'It must look something like this `barb1/wizard2`. '
                                'My wife says to use `?help` for more information.')
@@ -269,22 +240,22 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
         # For each char_hp_mod
         for char_hp_mod in char_hp_mods:
             # Check if valid char_hp_mod
-            if char_hp_mod in helper.HP_MODS:
-                if char_hp_mod in helper.HILLDWARF_MODS:
+            if char_hp_mod in constants.HP_MODS:
+                if char_hp_mod in constants.HILLDWARF_MODS:
                     current_hp = current_hp + current_level
                     is_hilldwarf = True
-                elif char_hp_mod in helper.BERSERKER_AXE_MODS:
+                elif char_hp_mod in constants.BERSERKER_AXE_MODS:
                     current_hp = current_hp + current_level
                     axe_attuned = True
-                elif char_hp_mod in helper.TOUGH_MODS:
+                elif char_hp_mod in constants.TOUGH_MODS:
                     current_hp = current_hp + (current_level * 2)
                     is_tough = True
             # If not valid char_hp_mod
             else:
-                await bot_typing(ctx, 2)
-                await ctx.send(f'Oof! {ctx.author.mention}, my friend, I don\'t know the `{char_hp_mod}` HP modifier! '
-                               'My wife says to use `?help` for more information.')
-                helper.log_error(f'Unknown `{char_hp_mod}` HP modifier.',
+                await bot_typing(ctx, 1)
+                unknown = f'`{char_hp_mod}` HP modifier'
+                await ctx.send((helper.valron_doesnt_know(ctx, unknown)))
+                helper.log_error(f'Unknown {unknown}.',
                                  ctx.message.content)
                 no_error = False
                 break
@@ -325,10 +296,10 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
         ####################
         ## SEND BOT REPLY ##
         ####################
-        await bot_typing(ctx, 2)
+        await bot_typing(ctx, 1)
         await ctx.send(bot_reply)
 
-    toc = time.perf_counter()
+    # toc = time.perf_counter()
     # print(f"Performance: {toc - tic:0.4f} seconds")
 
 
