@@ -133,13 +133,19 @@ def alias_builder(alias_list):
 
 
 def valron_doesnt_know(ctx, the_thing):
-    return (f'Oof! {ctx.author.mention}, my friend, I don\'t know the {the_thing}! ' +
-            'My wife says to use `?options` to see your classes or HP modifier options or `?help` for more information.')
+    return (f'Oof! {ctx.author.mention}, my friend, I don\'t know the {the_thing}! '
+            + 'My wife says to use `?options` to see your classes or HP modifier options or `?help` for more information.')
 
 
 ###################
 ## OTHER HELPERS ##
 ###################
+def update_guild_counter(num_guilds):
+    return discord.Activity(
+        name=f'D&D 5e in {num_guilds} guilds | ?help',
+        type=discord.ActivityType.playing)
+
+
 def get_class(alias):
     """Returns the D&D class given an alias.
 

@@ -19,7 +19,7 @@ token = DISCORD_TOKEN
 
 # for deployment
 # token = os.environ['DISCORD_TOKEN']
-bot = commands.Bot(command_prefix='??',
+bot = commands.Bot(command_prefix='?',
                    case_insensitive=True,
                    description='A bot for calculating an AL D&D 5e character\'s hit points.',
                    help_command=None)
@@ -38,11 +38,7 @@ async def on_ready():
     #     print(f' >> {guild.name}')
 
     print(f'Connected to {len(bot.guilds)} Discord servers!')
-
-    activity = discord.Activity(
-        name=f'D&D 5e in {len(bot.guilds)} guilds | ?help',
-        type=discord.ActivityType.playing)
-    await bot.change_presence(activity=activity)
+    await bot.change_presence(activity=helper.update_guild_counter(len(bot.guilds)))
 
 
 #########################
@@ -51,11 +47,13 @@ async def on_ready():
 @bot.event
 async def on_guild_join(guild):
     print(f'Joined {guild.name}!')
+    await bot.change_presence(activity=helper.update_guild_counter(len(bot.guilds)))
 
 
 @bot.event
 async def on_guild_remove(guild):
     print(f'Left {guild.name}...')
+    await bot.change_presence(activity=helper.update_guild_counter(len(bot.guilds)))
 
 
 @bot.event
