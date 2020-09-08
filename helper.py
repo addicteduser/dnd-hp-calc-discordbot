@@ -77,13 +77,12 @@ def get_dnd_aliases():
     """
     aliases = []
 
-    for dnd_class in DND_CLASSES:
+    for dnd_class in get_classes():
         aliases.append(dnd_class.aliases)
 
     return aliases
 
 
-DND_CLASSES = get_classes()
 CLASS_ALIASES = get_dnd_aliases()
 
 
@@ -159,8 +158,8 @@ def get_class(alias):
     dnd_class = None
     i = 0
 
-    while i < len(DND_CLASSES):
-        dnd_class = DND_CLASSES[i].get_class(alias)
+    while i < len(get_classes()):
+        dnd_class = get_classes()[i].get_class(alias)
         if dnd_class:
             break
         else:
