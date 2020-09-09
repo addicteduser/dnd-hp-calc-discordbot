@@ -104,7 +104,7 @@ async def options(ctx):
                     value=helper.alias_builder(helper.get_dnd_aliases()),
                     inline=False)
     embed.add_field(name="List of supported HP modifiers",
-                    value=helper.alias_builder(constants.HP_MOD_ALIASES),
+                    value=helper.alias_builder(constants.HP_MOD_ALIASES()),
                     inline=False)
     embed.set_footer(
         text='?help - main help command\n'
@@ -240,14 +240,14 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
         # For each char_hp_mod
         for char_hp_mod in char_hp_mods:
             # Check if valid char_hp_mod
-            if char_hp_mod in constants.HP_MODS:
-                if char_hp_mod in constants.HILLDWARF_MODS:
+            if char_hp_mod in constants.HP_MODS():
+                if char_hp_mod in constants.HILLDWARF_MODS():
                     current_hp = current_hp + current_level
                     is_hilldwarf = True
-                elif char_hp_mod in constants.BERSERKER_AXE_MODS:
+                elif char_hp_mod in constants.BERSERKER_AXE_MODS():
                     current_hp = current_hp + current_level
                     axe_attuned = True
-                elif char_hp_mod in constants.TOUGH_MODS:
+                elif char_hp_mod in constants.TOUGH_MODS():
                     current_hp = current_hp + (current_level * 2)
                     is_tough = True
             # If not valid char_hp_mod

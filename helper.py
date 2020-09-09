@@ -129,8 +129,8 @@ def alias_builder(alias_list):
 
 
 def valron_doesnt_know(ctx, the_thing):
-    return (f'Oof! {ctx.author.mention}, my friend, I don\'t know the {the_thing}! ' +
-            'My wife says to use `?options` to see your classes or HP modifier options or `?help` for more information.')
+    return (f'Oof! {ctx.author.mention}, my friend, I don\'t know the {the_thing}! '
+            + 'My wife says to use `?options` to see your classes or HP modifier options or `?help` for more information.')
 
 
 ###################
