@@ -101,7 +101,7 @@ async def options(ctx):
     embed = helper.embed_builder(
         bot.user.name, 'Hello, my friend! I am Valron. Here are the supported classes and HP modifiers for your reference.')
     embed.add_field(name="List of supported classes",
-                    value=helper.alias_builder(helper.CLASS_ALIASES),
+                    value=helper.alias_builder(helper.get_dnd_aliases()),
                     inline=False)
     embed.add_field(name="List of supported HP modifiers",
                     value=helper.alias_builder(constants.HP_MOD_ALIASES),
