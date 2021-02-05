@@ -34,7 +34,7 @@ Invite it to your Discord server with this [link](https://discordapp.com/api/oau
 
 ### Dependencies
 
-- [discord.py v1.3.4](https://discordpy.readthedocs.io/en/latest/), a modern, easy to use, feature-rich, and async ready API wrapper for Discord
+- [discord.py v1.6.0](https://discordpy.readthedocs.io/en/v1.6.0/), a modern, easy to use, feature-rich, and async ready API wrapper for Discord
 - Python 3
 
 ### Local Development
