@@ -2,87 +2,6 @@ import discord
 import constants
 
 
-class Class:
-    """Represents a D&D class.
-
-    Args:
-        name (str): The name of the class.
-        aliases (list(str)): The list of aliases of the class.
-        hit_die (int): The maximum hit die value.
-
-    Attributes:
-        name: The name of the class.
-        aliases: The list of aliases of the class.
-        hit_die: The maximum hit die value.
-
-    """
-
-    def __init__(self, name, aliases, hit_die):
-        self.name = name
-        self.aliases = aliases
-        self.hit_die = hit_die
-
-    def get_class(self, alias):
-        """Returns the D&D class given an alias.
-
-        Args:
-            alias (str): An alias of the class.
-
-        Returns:
-            Class: A D&D class.
-
-        """
-        if alias in self.aliases:
-            return self
-
-###################
-## DATA BUILDERS ##
-###################
-
-
-def get_classes():
-    """Returns the list of possible D&D classes.
-
-    Returns:
-        list(Class): A list of D&D classes.
-
-    """
-    classes = []
-
-    classes.append(Class('Artificer', ['artificer', 'art', 'a'], 8))
-    classes.append(Class('Barbarian', ['barbarian', 'barb', 'bb'], 12))
-    classes.append(Class('Bard', ['bard', 'bd'], 8))
-    classes.append(Class('Cleric', ['cleric', 'cl', 'c'], 8))
-    classes.append(Class('Druid', ['druid', 'dr', 'd'], 8))
-    classes.append(Class('Fighter', ['fighter', 'fight', 'f'], 10))
-    classes.append(Class('Monk', ['monk', 'mk', 'm'], 8))
-    classes.append(Class('Paladin', ['paladin', 'pal', 'p'], 10))
-    classes.append(Class('Ranger', ['ranger', 'ra'], 10))
-    classes.append(Class('Rogue', ['rogue', 'ro'], 8))
-    classes.append(Class('Sorcerer', ['sorcerer', 'sorc', 's'], 6))
-    classes.append(Class('Draconic Sorcerer', [
-                   'draconicsorcerer', 'draconicsorc', 'dracsorc', 'ds'], 6))
-    classes.append(Class('Warlock', ['warlock', 'lock', 'wr'], 8))
-    classes.append(Class('Wizard', ['wizard', 'wiz', 'wz'], 6))
-
-    return classes
-
-
-def get_dnd_aliases():
-    """Returns the list of alias lists per D&D class.
-
-    Returns:
-        list(list(str)): The list of alias lists per D&D class.
-
-    """
-    aliases = []
-
-    for dnd_class in get_classes():
-        aliases.append(dnd_class.aliases)
-
-    return aliases
-
-
 ####################
 ## STRING BUILDER ##
 ####################
@@ -90,8 +9,7 @@ def classes_and_levels_builder(classes_and_levels):
     """Returns the formatted classes and levels string for the bot reply.
 
     Args:
-        classes_and_levels (list((str, int))): A list of tuples, where one tuple
-            has a value of `(Class.name, level)`.
+        classes_and_levels (list(Class, int)): A list of tuples wherein each element is the class and corresponding level.
 
     Returns:
         str: Formatted classes and levels string.
@@ -100,7 +18,7 @@ def classes_and_levels_builder(classes_and_levels):
     result = ''
 
     for class_and_level in classes_and_levels:
-        result = result + f'{class_and_level[0]} {class_and_level[1]} / '
+        result = result + f'{class_and_level[0].name} {class_and_level[1]} / '
 
     return result[:-3]
 
@@ -129,14 +47,27 @@ def alias_builder(alias_list):
 
 
 def valron_doesnt_know(ctx, the_thing):
-    return (f'Oof! {ctx.author.mention}, my friend, I don\'t know the {the_thing}! '
-            + 'My wife says to use `?options` to see your classes or HP modifier options or `?help` for more information.')
+    """Returns the bot's reply when it does not recognize an input.
+
+    Args:
+        ctx (discord.ext.commands.Context): See discordpy docs.
+        the_thing (str): The unrecognized input.
+
+    Returns:
+        str: Formatted reply of the bot.
+
+    """
+    return (f'Oof! {ctx.author.mention}, my friend, I don\'t know the {the_thing}! ' +
+            'My wife says to use `?options` to see your classes or HP modifier options or `?help` for more information.')
 
 
 ###################
 ## OTHER HELPERS ##
 ###################
 def update_guild_counter(num_guilds):
+    """Updates status displaying the number of Discord servers the bot belongs in.
+
+    """
     return discord.Activity(
         name=f'D&D 5e in {num_guilds} guilds | ?help',
         type=discord.ActivityType.playing)
@@ -155,8 +86,8 @@ def get_class(alias):
     dnd_class = None
     i = 0
 
-    while i < len(get_classes()):
-        dnd_class = get_classes()[i].get_class(alias)
+    while i < len(constants.DND_CLASSES()):
+        dnd_class = constants.DND_CLASSES()[i].get_class(alias)
         if dnd_class:
             break
         else:
@@ -186,8 +117,3 @@ def embed_builder(valron, description):
     embed.set_thumbnail(url=f'{constants.IMG_LINK}')
 
     return embed
-
-
-def log_error(error, command):
-    print(f'ERROR: {error}')
-    print(f'COMMAND: {command}')
