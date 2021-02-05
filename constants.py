@@ -52,7 +52,6 @@ def DND_ALIASES():
 ## CONSTANTS ##
 ###############
 
-
 def HILLDWARF_MODS():
     return ['hilldwarf', 'hdwarf', 'hd']
 

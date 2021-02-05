@@ -9,8 +9,7 @@ def classes_and_levels_builder(classes_and_levels):
     """Returns the formatted classes and levels string for the bot reply.
 
     Args:
-        classes_and_levels (list((str, int))): A list of tuples, where one tuple
-            has a value of `(Class, level)`.
+        classes_and_levels (list(Class, int)): A list of tuples wherein each element is the class and corresponding level.
 
     Returns:
         str: Formatted classes and levels string.
@@ -48,6 +47,16 @@ def alias_builder(alias_list):
 
 
 def valron_doesnt_know(ctx, the_thing):
+    """Returns the bot's reply when it does not recognize an input.
+
+    Args:
+        ctx (discord.ext.commands.Context): See discordpy docs.
+        the_thing (str): The unrecognized input.
+
+    Returns:
+        str: Formatted reply of the bot.
+
+    """
     return (f'Oof! {ctx.author.mention}, my friend, I don\'t know the {the_thing}! ' +
             'My wife says to use `?options` to see your classes or HP modifier options or `?help` for more information.')
 
@@ -56,6 +65,9 @@ def valron_doesnt_know(ctx, the_thing):
 ## OTHER HELPERS ##
 ###################
 def update_guild_counter(num_guilds):
+    """Updates status displaying the number of Discord servers the bot belongs in.
+
+    """
     return discord.Activity(
         name=f'D&D 5e in {num_guilds} guilds | ?help',
         type=discord.ActivityType.playing)

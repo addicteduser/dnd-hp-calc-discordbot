@@ -37,6 +37,14 @@ bot = commands.Bot(command_prefix='?',
 ##################
 @bot.command()
 async def help(ctx):
+    """Displays an embed on how to use the bot.
+
+    Args:
+        ctx (discord.ext.commands.Context): See discordpy docs.
+
+    Invoked via: ?help
+
+    """
     embed = helper.embed_builder(
         bot.user.name, "Hello, my friend! I am Valron. Below is a guide on how I can help you compute for your AL D&D 5e character's hit points.")
     embed.add_field(name="Command",
@@ -60,6 +68,14 @@ async def help(ctx):
 
 @bot.command()
 async def options(ctx):
+    """Displays an embed regarding the supported classes and HP modifiers.
+
+    Args:
+        ctx (discord.ext.commands.Context): See discordpy docs.
+
+    Invoked via: ?options
+
+    """
     embed = helper.embed_builder(
         bot.user.name, 'Hello, my friend! I am Valron. Here are the supported classes and HP modifiers for your reference.')
     embed.add_field(name="List of supported classes",
@@ -77,6 +93,14 @@ async def options(ctx):
 
 @bot.command()
 async def links(ctx):
+    """Displays an embed showing various links.
+
+    Args:
+        ctx (discord.ext.commands.Context): See discordpy docs.
+
+    Invoked via: ?links
+
+    """
     embed = helper.embed_builder(
         bot.user.name, 'Hello, my friend! I am Valron. My wife has compiled a list of helpful links for you.')
     embed.add_field(name="Invite me to your server with this link",
@@ -99,7 +123,18 @@ async def links(ctx):
 
 
 @bot.command()
-async def hp2(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
+async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
+    """Shows the formatted string showing the classes, levels, HP mods, and calculated hit points.
+
+    Args:
+        ctx (discord.ext.commands.Context): See discordpy docs.
+        con_modifier (int): The constitution modifer.
+        input_classes_and_levels (str): The input classes and levels.
+        input_hp_mods (str): The input HP modifiers.
+
+    Invoked via: ?hp con_modifier input_classes_and_levels input_hp_mods
+
+    """
     # tic = time.perf_counter()
 
     # Parse input
@@ -128,11 +163,34 @@ async def hp2(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mo
 ## HELPER FUNCTIONS ##
 ######################
 async def parse_input(input_classes_and_levels, input_hp_mods, ctx=None):
+    """Parses the input_classes_and_levels and input_hp_mods.
+
+    Args:
+        input_classes_and_levels (str): The input classes and levels.
+        input_hp_mods (str): The input HP modifiers.
+        ctx (discord.ext.commands.Context): See discordpy docs.
+
+    Returns:
+        (list(Class, int), Flags): The first one is a list of tuples
+            wherein each element is the Class and level. The second
+            is the collection of HP modifier flags.
+
+    """
     flags = await parse_input_hp_mods(input_hp_mods, ctx)
     return await parse_input_classes_and_levels(input_classes_and_levels, flags, ctx)
 
 
 async def parse_input_hp_mods(input_hp_mods, ctx=None):
+    """Parses the input_hp_mods.
+
+    Args:
+        input_hp_mods (str): The input HP modifiers.
+        ctx (discord.ext.commands.Context): See discordpy docs.
+
+    Returns:
+        Flags: The collection of HP modifier flags.
+
+    """
     flags = Flags(True, False, False, False)
 
     # If there are input_hp_mods
@@ -167,6 +225,19 @@ async def parse_input_hp_mods(input_hp_mods, ctx=None):
 
 
 async def parse_input_classes_and_levels(input_classes_and_levels, flags, ctx=None):
+    """Parses the input_classes_and_levels.
+
+    Args:
+        input_classes_and_levels (str): The input classes and levels.
+        flags (Flags): The collection of HP modifier flags.
+        ctx (discord.ext.commands.Context): See discordpy docs.
+
+    Returns:
+        (list(Class, int), Flags): The first one is a list of tuples
+            wherein each element is the Class and level. The second
+            is the collection of HP modifier flags.
+
+    """
     classes_and_levels = []
 
     # List of word##
@@ -220,11 +291,28 @@ async def parse_input_classes_and_levels(input_classes_and_levels, flags, ctx=No
 
 
 async def bot_typing(ctx, time):
+    """Triggers 'Valron is typing...' in Discord.
+
+    Args:
+        ctx (discord.ext.commands.Context): See discordpy docs.
+        time (int): Number of seconds to wait.
+
+    """
     await ctx.trigger_typing()
     await asyncio.sleep(time)
 
 
 def calculate_base_hp(classes_and_levels, con_modifier):
+    """Calculates the base hit points given the classes, levels, and constitution modifier.
+
+    Args:
+        classes_and_levels (list(Class, int)): A list of tuples wherein each element is the class and corresponding level.
+        con_modifier (int): The constitution modifer.
+
+    Returns:
+        (int, int): A tuple of the partial_hp and total character level.
+
+    """
     is_level_1 = True
     current_hp = 0
     total_level = 0
@@ -260,6 +348,17 @@ def calculate_base_hp(classes_and_levels, con_modifier):
 
 
 def apply_hp_mods(partial_hp, total_level, flags):
+    """Calculates the hit points with the HP modifiers.
+
+    Args:
+        parital_hp (int): The base hit points.
+        total_level (int): The total character level.
+        flags (Flags): The collection of HP modifier flags
+
+    Returns:
+        int: The hit points with the HP modifiers.
+
+    """
     if flags.is_hilldwarf:
         partial_hp = partial_hp + total_level
 
@@ -273,6 +372,20 @@ def apply_hp_mods(partial_hp, total_level, flags):
 
 
 def bot_reply_builder(con_modifier, classes_and_levels, total_level, hp, flags, ctx):
+    """Returns the formatted reply of the bot.
+
+    Args:
+        con_modifier (int): The constitution modifer.
+        classes_and_levels (list(Class, int)): A list of tuples wherein each element is the class and corresponding level.
+        hp: The calculated hit points.
+        total_level (int): The total character level.
+        flags (Flags): The collection of HP modifier flags
+        ctx (discord.ext.commands.Context): See discordpy docs.
+
+    Returns:
+        str: Formatted reply of the bot.
+
+    """
     if total_level > 20:
         bot_reply = f'Oof! {ctx.author.mention}, my friend, you have a level `{total_level}` character? '
         'My wife says to double check its levels! But if you really want to know, a '

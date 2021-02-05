@@ -1,4 +1,8 @@
 class Flags:
+    """A collection of HP modifier flags
+
+    """
+
     def __init__(self, no_error, is_hilldwarf, axe_attuned, is_tough):
         self.no_error = no_error
         self.is_hilldwarf = is_hilldwarf
