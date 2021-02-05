@@ -23,14 +23,15 @@ def parse_input(input_classes_and_levels, input_hp_mods):
 
 
 def parse_input_classes_and_levels(input_classes_and_levels):
-    current_classes_and_levels = []
+    classes_and_levels = []
 
     # List of word##
     parsed_classes_and_levels = input_classes_and_levels.lower().split('/')
 
     # If there are parsed_classes_and_levels
     if parsed_classes_and_levels:
-        # Compute for the HP of each class
+
+        # For each parsed_class_and_level, get class and level
         for parsed_class_and_level in parsed_classes_and_levels:
             class_and_level = parsed_class_and_level.strip()
 
@@ -44,60 +45,32 @@ def parse_input_classes_and_levels(input_classes_and_levels):
                 dnd_class = helper.get_class(matched_dnd_class)
                 if dnd_class:
                     # Track class name and level
-                    current_classes_and_levels.append(
-                        (dnd_class, matched_level))
-
-                    # avg_hit_dice = math.floor(dnd_class.hit_die / 2) + 1
-                    #
-                    # # For the base class
-                    # if current_level == 0:
-                    #     # On 1st level: max_hit_die + con_modifier
-                    #     current_hp = current_hp + \
-                    #         dnd_class.hit_die + con_modifier
-                    #     # On every level above 1st: avg_hit_dice + con_modifier
-                    #     current_hp = current_hp + \
-                    #         ((avg_hit_dice + con_modifier) * (matched_level - 1))
-                    #
-                    # # On every level above 1st: avg_hit_dice + con_modifier
-                    # else:
-                    #     current_hp = current_hp + \
-                    #         ((avg_hit_dice + con_modifier) * matched_level)
-
-                    # If matched_dnd_class is a Draconic Sorcerer
-                    # if dnd_class.name == 'Draconic Sorcerer':
-                    #     current_hp = current_hp + matched_level
-                    #
-                    # current_level = current_level + matched_level
-
-                # If matched_dnd_class does not exist in list of supported D&D classes
+                    classes_and_levels.append((dnd_class, matched_level))
                 else:
-                    # await bot_typing(ctx, 1)
-                    # unknown = f'`{matched_dnd_class}` class'
-                    # await ctx.send((helper.valron_doesnt_know(ctx, unknown)))
-                    # helper.log_error(f'Unknown {unknown}.',
-                    #                  ctx.message.content)
-                    # no_error = False
-                    # break
-                    print('unknown class')
+                    await bot_typing(ctx, 1)
+                    unknown = f'`{matched_dnd_class}` class'
+                    await ctx.send((helper.valron_doesnt_know(ctx, unknown)))
+                    helper.log_error(f'Unknown {unknown}.',
+                                     ctx.message.content)
+                    no_error = False
+                    break
 
             # If it does not follow word## pattern
             else:
-                # await bot_typing(ctx, 1)
-                # await ctx.send(f'Oof! {ctx.author.mention}, my friend, kindly check your classes and levels! '
-                #                'It must look something like this `barb1/wizard2`. '
-                #                'My wife says to use `?help` for more information.')
-                # helper.log_error('Does not follow the classA##/classB##/etc format.',
-                #                  ctx.message.content)
-                # no_error = False
-                # break
-                print('Does not follow the classA##/classB##/etc format')
+                await bot_typing(ctx, 1)
+                await ctx.send(f'Oof! {ctx.author.mention}, my friend, kindly check your classes and levels! '
+                               'It must look something like this `barb1/wizard2`. '
+                               'My wife says to use `?help` for more information.')
+                helper.log_error('Does not follow the classA##/classB##/etc format.',
+                                 ctx.message.content)
+                no_error = False
+                break
 
     # If there are no parsed_classes_and_levels
     else:
-        # raise commands.MissingRequiredArgument
-        print('raise commands.MissingRequiredArgument')
+        raise commands.MissingRequiredArgument
 
-    return current_classes_and_levels
+    return classes_and_levels
 
 
 def parse_input_hp_mods(input_hp_mods):
@@ -184,9 +157,6 @@ def apply_hp_mods(current_hp, total_level):
     return current_hp
 
 
-print(is_tough)
 classes_and_levels = parse_input(input_classes_and_levels, input_hp_mods)
-print(is_tough)
 (current_hp, total_level) = calculate_base_hp(classes_and_levels)
 hp = apply_hp_mods(current_hp, total_level)
-print(hp)
