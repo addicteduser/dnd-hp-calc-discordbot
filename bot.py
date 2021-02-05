@@ -434,12 +434,17 @@ def bot_reply_builder(con_modifier, classes_and_levels, total_level, hp, flags, 
 async def on_connect():
     print(f'{bot.user.name} has connected to Discord!')
 
+    print(f'Connected to {len(bot.guilds)} Discord servers!')
+    await bot.change_presence(activity=helper.update_guild_counter(len(bot.guilds)))
+
+
+@bot.event
+async def on_ready():
+    print(f'{bot.user.name} is ready to serve!')
+
     # print('Connected to the following Discord servers: ')
     # for guild in bot.guilds:
     #     print(f' >> {guild.name}')
-
-    print(f'Connected to {len(bot.guilds)} Discord servers!')
-    await bot.change_presence(activity=helper.update_guild_counter(len(bot.guilds)))
 
 
 @bot.event
