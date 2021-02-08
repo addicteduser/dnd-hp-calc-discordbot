@@ -84,3 +84,4 @@ SUPPORT_SERVER_LINK = 'https://discord.gg/waCBQuD'
 
 PAYPAL_LINK = 'https://paypal.me/addicteduser'
 KOFI_LINK = 'https://ko-fi.com/addicteduser'
+GCASH_QR_CODE = 'https://i.imgur.com/fnMORVa.jpg'

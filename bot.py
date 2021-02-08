@@ -113,7 +113,7 @@ async def links(ctx):
                     value=f'[Click me!]({constants.GITHUB_LINK})',
                     inline=False)
     embed.add_field(name="Want to support me and my wife?",
-                    value=f'Click these: [PayPal]({constants.PAYPAL_LINK}) | [Ko-Fi]({constants.KOFI_LINK})',
+                    value=f'Click any of these: [PayPal]({constants.PAYPAL_LINK}) | [Ko-Fi]({constants.KOFI_LINK}) | [GCash]({constants.GCASH_QR_CODE})',
                     inline=False)
     embed.set_footer(
         text='?help - main help command\n'
