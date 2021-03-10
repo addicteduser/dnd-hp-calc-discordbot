@@ -1,4 +1,11 @@
-from classes import Class
+"""Constants
+
+This module provides the constant values.
+"""
+
+# pylint: disable=C0103
+
+from utils.classes import Class
 
 ###################
 ## DATA BUILDERS ##
@@ -53,22 +60,27 @@ def DND_ALIASES():
 ###############
 
 def HILLDWARF_MODS():
+    """Returns the Hill Dwarf HP modifier aliases."""
     return ['hilldwarf', 'hdwarf', 'hd']
 
 
 def BERSERKER_AXE_MODS():
+    """Returns the Berserker Axe HP modifier aliases."""
     return ['berserkeraxe', 'axe', 'ba']
 
 
 def TOUGH_MODS():
+    """Returns the Tough Feat HP modifier aliases."""
     return ['tough', 't']
 
 
 def HP_MODS():
+    """Returns the list of HP modifier aliases."""
     return HILLDWARF_MODS() + BERSERKER_AXE_MODS() + TOUGH_MODS()
 
 
 def HP_MOD_ALIASES():
+    """Returns the list of list of HP modifer aliases."""
     return [HILLDWARF_MODS(), BERSERKER_AXE_MODS(), TOUGH_MODS()]
 
 
@@ -79,7 +91,9 @@ TOP_GG_LINK = 'https://top.gg/bot/666625461811413008'
 GITHUB_LINK = 'https://github.com/addicteduser/dnd-hp-calc-discordbot'
 IMG_LINK = 'https://i.imgur.com/0bByXQ4.png'
 
-DISCORD_INVITE_LINK = 'https://discordapp.com/api/oauth2/authorize?client_id=666625461811413008&permissions=11264&scope=bot'
+DISCORD_INVITE_LINK = ('https://discordapp.com/api/oauth2/authorize?'
+                       + 'client_id=666625461811413008&'
+                       + 'permissions=11264&scope=bot')
 SUPPORT_SERVER_LINK = 'https://discord.gg/waCBQuD'
 
 PAYPAL_LINK = 'https://paypal.me/addicteduser'
