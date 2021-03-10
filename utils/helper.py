@@ -1,5 +1,10 @@
+"""Helper
+
+This module provides helper functions.
+"""
+
 import discord
-import constants
+import utils.constants as constants
 
 
 ####################
@@ -9,7 +14,8 @@ def classes_and_levels_builder(classes_and_levels):
     """Returns the formatted classes and levels string for the bot reply.
 
     Args:
-        classes_and_levels (list(Class, int)): A list of tuples wherein each element is the class and corresponding level.
+        classes_and_levels (list(Class, int)): A list of tuples wherein each
+            element is the class and corresponding level.
 
     Returns:
         str: Formatted classes and levels string.
@@ -57,8 +63,9 @@ def valron_doesnt_know(ctx, the_thing):
         str: Formatted reply of the bot.
 
     """
-    return (f'Oof! {ctx.author.mention}, my friend, I don\'t know the {the_thing}! ' +
-            'My wife says to use `?options` to see your classes or HP modifier options or `?help` for more information.')
+    return (f"Oof! {ctx.author.mention}, my friend, I don't know the " +
+            f"{the_thing}! My wife says to use `?options` to see your " +
+            "classes or HP modifier options or `?help` for more information.")
 
 
 ###################
@@ -90,8 +97,8 @@ def get_class(alias):
         dnd_class = constants.DND_CLASSES()[i].get_class(alias)
         if dnd_class:
             break
-        else:
-            i += 1
+
+        i += 1
 
     return dnd_class
 

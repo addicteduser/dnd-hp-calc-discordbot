@@ -1,7 +1,12 @@
-class Flags:
-    """A collection of HP modifier flags
+"""Classes
 
-    """
+This module provides the classes used in the app."""
+
+# pylint: disable=R0903
+
+
+class Flags:
+    """A collection of HP modifier flags."""
 
     def __init__(self, no_error, is_hilldwarf, axe_attuned, is_tough):
         self.no_error = no_error
@@ -42,3 +47,5 @@ class Class:
         """
         if alias in self.aliases:
             return self
+
+        return None
