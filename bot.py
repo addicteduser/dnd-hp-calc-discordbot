@@ -1,33 +1,33 @@
-import re
-import math
-import time
-import asyncio
+"""D&D HP Calculator Bot
 
-# Discord.py
-import discord
+This is the entry point of the application.
+"""
+
+# pylint: disable=C0103, W0622, E0237, R0913
+
+import asyncio
+import math
+import os
+import re
+# import time
 import typing
+
+import discord
 from discord.ext import commands
 from discord.utils import get
+from dotenv import load_dotenv
+from utils import constants, helper
+from utils.classes import Flags
 
-# Custom
-from classes import Flags
-import helper
-import constants
+# Load environment variables
+load_dotenv()
 
-
-# for local development
-from secrets import DISCORD_TOKEN
-token = DISCORD_TOKEN
-
-# for deployment
-# import os
-# token = os.environ['DISCORD_TOKEN']
 
 intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix='?',
                    case_insensitive=True,
-                   description='A bot for calculating an AL D&D 5e character\'s hit points.',
+                   description="A bot for calculating an AL D&D 5e character's hit points.",
                    help_command=None,
                    intents=intents)
 
@@ -46,7 +46,8 @@ async def help(ctx):
 
     """
     embed = helper.embed_builder(
-        bot.user.name, "Hello, my friend! I am Valron. Below is a guide on how I can help you compute for your AL D&D 5e character's hit points.")
+        bot.user.name, "Hello, my friend! I am Valron. Below is a guide on " +
+        "how I can help you compute for your AL D&D 5e character's hit points.")
     embed.add_field(name="Command",
                     value="`?hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`",
                     inline=False)
@@ -77,7 +78,8 @@ async def options(ctx):
 
     """
     embed = helper.embed_builder(
-        bot.user.name, 'Hello, my friend! I am Valron. Here are the supported classes and HP modifiers for your reference.')
+        bot.user.name, "Hello, my friend! I am Valron. Here are the supported " +
+        "classes and HP modifiers for your reference")
     embed.add_field(name="List of supported classes",
                     value=helper.alias_builder(constants.DND_ALIASES()),
                     inline=False)
@@ -102,7 +104,8 @@ async def links(ctx):
 
     """
     embed = helper.embed_builder(
-        bot.user.name, 'Hello, my friend! I am Valron. My wife has compiled a list of helpful links for you.')
+        bot.user.name, 'Hello, my friend! I am Valron. My wife has compiled a '
+        + 'list of helpful links for you.')
     embed.add_field(name="Invite me to your server with this link",
                     value=f'[Click me!]({constants.DISCORD_INVITE_LINK})',
                     inline=False)
@@ -113,7 +116,8 @@ async def links(ctx):
                     value=f'[Click me!]({constants.GITHUB_LINK})',
                     inline=False)
     embed.add_field(name="Want to support me and my wife?",
-                    value=f'Click any of these: [PayPal]({constants.PAYPAL_LINK}) | [Ko-Fi]({constants.KOFI_LINK}) | [GCash]({constants.GCASH_QR_CODE})',
+                    value=f'Click any of these: [PayPal]({constants.PAYPAL_LINK}) ' +
+                    '| [Ko-Fi]({constants.KOFI_LINK}) | [GCash]({constants.GCASH_QR_CODE})',
                     inline=False)
     embed.set_footer(
         text='?help - main help command\n'
@@ -123,7 +127,8 @@ async def links(ctx):
 
 
 @bot.command()
-async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mods: typing.Optional[str] = None):
+async def hp(ctx, con_modifier: int, input_classes_and_levels: str,
+             input_hp_mods: typing.Optional[str] = None):
     """Shows the formatted string showing the classes, levels, HP mods, and calculated hit points.
 
     Args:
@@ -146,12 +151,12 @@ async def hp(ctx, con_modifier: int, input_classes_and_levels: str, input_hp_mod
         classes_and_levels, con_modifier)
 
     # Apply HP modifiers
-    hp = apply_hp_mods(partial_hp, total_level, flags)
+    final_hp = apply_hp_mods(partial_hp, total_level, flags)
 
     # Send bot reply
     if flags.no_error:
         bot_reply = bot_reply_builder(
-            con_modifier, classes_and_levels, total_level, hp, flags, ctx)
+            con_modifier, classes_and_levels, total_level, final_hp, flags, ctx)
         await bot_typing(ctx, 1)
         await ctx.send(bot_reply)
 
@@ -276,7 +281,8 @@ async def parse_input_classes_and_levels(input_classes_and_levels, flags, ctx=No
             else:
                 if ctx:
                     await bot_typing(ctx, 1)
-                    await ctx.send(f'Oof! {ctx.author.mention}, my friend, kindly check your classes and levels! '
+                    await ctx.send(f'Oof! {ctx.author.mention}, my friend, '
+                                   'kindly check your classes and levels! '
                                    'It must look something like this `barb1/wizard2`. '
                                    'My wife says to use `?help` for more information.')
 
@@ -306,7 +312,8 @@ def calculate_base_hp(classes_and_levels, con_modifier):
     """Calculates the base hit points given the classes, levels, and constitution modifier.
 
     Args:
-        classes_and_levels (list(Class, int)): A list of tuples wherein each element is the class and corresponding level.
+        classes_and_levels (list(Class, int)): A list of tuples wherein each
+            element is the class and corresponding level.
         con_modifier (int): The constitution modifer.
 
     Returns:
@@ -371,13 +378,14 @@ def apply_hp_mods(partial_hp, total_level, flags):
     return partial_hp
 
 
-def bot_reply_builder(con_modifier, classes_and_levels, total_level, hp, flags, ctx):
+def bot_reply_builder(con_modifier, classes_and_levels, total_level, final_hp, flags, ctx):
     """Returns the formatted reply of the bot.
 
     Args:
         con_modifier (int): The constitution modifer.
-        classes_and_levels (list(Class, int)): A list of tuples wherein each element is the class and corresponding level.
-        hp: The calculated hit points.
+        classes_and_levels (list(Class, int)): A list of tuples wherein each
+            element is the class and corresponding level.
+        final_hp: The calculated hit points.
         total_level (int): The total character level.
         flags (Flags): The collection of HP modifier flags
         ctx (discord.ext.commands.Context): See discordpy docs.
@@ -387,8 +395,9 @@ def bot_reply_builder(con_modifier, classes_and_levels, total_level, hp, flags, 
 
     """
     if total_level > 20:
-        bot_reply = f'Oof! {ctx.author.mention}, my friend, you have a level `{total_level}` character? '
-        'My wife says to double check its levels! But if you really want to know, a '
+        bot_reply = (f'Oof! {ctx.author.mention}, my friend, you have a level '
+                     + f'`{total_level}` character?  My wife says to double check its '
+                     + 'levels! But if you really want to know, a ')
     else:
         bot_reply = f'{ctx.author.mention}, my friend, a '
 
@@ -407,7 +416,7 @@ def bot_reply_builder(con_modifier, classes_and_levels, total_level, hp, flags, 
     if flags.is_tough:
         bot_reply = bot_reply + 'and `Tough feat` '
 
-    bot_reply = bot_reply + f'has `{hp}` hit points.'
+    bot_reply = bot_reply + f'has `{final_hp}` hit points.'
 
     # On NN server, summon corgi when there is negative con
     if((ctx.guild.name == 'Natural Newbie') and (con_modifier < 0)):
@@ -432,6 +441,7 @@ def bot_reply_builder(con_modifier, classes_and_levels, total_level, hp, flags, 
 
 @bot.event
 async def on_connect():
+    """See https://discordpy.readthedocs.io/en/latest/api.html#event-reference"""
     print(f'{bot.user.name} has connected to Discord!')
 
     print(f'Connected to {len(bot.guilds)} Discord servers!')
@@ -440,6 +450,7 @@ async def on_connect():
 
 @bot.event
 async def on_ready():
+    """See https://discordpy.readthedocs.io/en/latest/api.html#event-reference"""
     print(f'{bot.user.name} is ready to serve!')
 
     # print('Connected to the following Discord servers: ')
@@ -449,18 +460,21 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(guild):
+    """See https://discordpy.readthedocs.io/en/latest/api.html#event-reference"""
     print(f'Joined {guild.name}!')
     await bot.change_presence(activity=helper.update_guild_counter(len(bot.guilds)))
 
 
 @bot.event
 async def on_guild_remove(guild):
+    """See https://discordpy.readthedocs.io/en/latest/api.html#event-reference"""
     print(f'Left {guild.name}...')
     await bot.change_presence(activity=helper.update_guild_counter(len(bot.guilds)))
 
 
 @bot.event
 async def on_command_error(ctx, error):
+    """See https://discordpy.readthedocs.io/en/latest/api.html#event-reference"""
     if isinstance(error, commands.errors.MissingRequiredArgument):
         await bot_typing(ctx, 1)
         await ctx.send(f'Oof! {ctx.author.mention}, my friend, something is missing! '
@@ -475,4 +489,5 @@ async def on_command_error(ctx, error):
 ## DISCORD BOT START ##
 #######################
 if __name__ == '__main__':
+    token = os.getenv("DISCORD_TOKEN")
     bot.run(token)
