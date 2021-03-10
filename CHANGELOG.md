@@ -28,16 +28,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -->
 
-## [Unreleased](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.5.1...HEAD) - 2021-MM-DD
+## [Unreleased](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.0...HEAD) - YYYY-MM-DD
+
+- No unreleased changes at the moment.
+
+## [1.6.0](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.5.1...1.6.0) - 2021-03-10
 
 ### Added
 
-- Add CHANGELOG.
+- Add `CHANGELOG.md`.
+- Add `.env.sample`.
+- Add `.travis.yml` for continuous integration.
 
 ### Changed
 
 - Implement pylint suggestions.
 - Move utility/helper modules to `utils/` and refactor affected code.
+- Move unit tests to `tests/`.
+- Accessing Discord token is now in `.env` instead of `secrets.py`.
+- Optimize and parametrize ([`@pytest.mark.parametrize`](https://docs.pytest.org/en/stable/parametrize.html)) test functions.
+- Add Travis CI badge in `README.md`.
 
 ## [1.5.1](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.5.0...1.5.1) - 2021-02-08
 
