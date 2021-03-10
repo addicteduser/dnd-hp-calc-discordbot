@@ -47,7 +47,7 @@ Invite it to your Discord server with this [link](https://discordapp.com/api/oau
 
 ## Dontation/Support
 
-Hello, hello! This bot that I have made is just a little passion project of mine. Any [support or donation](https://paypal.me/addicteduser) is much appreciated to keep up with the hosting fees. Thank you very much!
+Hello, hello! This bot that I have made is just a little passion project of mine. Any support or donation ([PayPal](https://paypal.me/addicteduser) | [Ko-Fi](https://ko-fi.com/addicteduser) | [GCash](https://i.imgur.com/fnMORVa.jpg)) is much appreciated to keep up with the hosting fees. Thank you very much!
 
 For feedback or suggestions, join the support discord server [here](https://discord.gg/waCBQuD).
 

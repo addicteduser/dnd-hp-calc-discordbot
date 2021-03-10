@@ -48,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Accessing Discord token is now in `.env` instead of `secrets.py`.
 - Optimize and parametrize ([`@pytest.mark.parametrize`](https://docs.pytest.org/en/stable/parametrize.html)) test functions.
 - Add Travis CI badge in `README.md`.
+- Include Ko-Fi and GCash links in Donation/Support section of `README.md`.
 
 ## [1.5.1](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.5.0...1.5.1) - 2021-02-08
 
