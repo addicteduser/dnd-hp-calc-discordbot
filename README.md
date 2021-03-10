@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/addicteduser/dnd-hp-calc-discordbot.svg?branch=master)](https://travis-ci.com/addicteduser/dnd-hp-calc-discordbot)
+
 # Valron the HP Calculator
 
 ![Valron the HP Calculator](https://i.imgur.com/0bByXQ4.png?s=200)
@@ -8,41 +10,42 @@ _Art by [Zentrend](https://www.instagram.com/neil_is_zen/)._
 
 Discord Bot for computing your AL D&amp;D 5e character's hit points, given the Constitution modifier, its classes and levels, and other HP modifiers such as Tough feat or being a Hill Dwarf.
 
-### Discord Server Invitation
+## Discord Server Invitation
 
 Invite it to your Discord server with this [link](https://discordapp.com/api/oauth2/authorize?client_id=666625461811413008&permissions=11264&scope=bot).
 
-### Usage
+## Usage
 
-##### Command
+### Command
 
 `?hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`
 
-##### Example
+#### Example
 
 `?hp 3 fighter1/barb2/paladin1`
 
-##### Example with HP modifiers
+#### Example with HP modifiers
 
 `?hp 3 fighter1/barb2/paladin1 tough/hilldwarf`
 
-##### Other commands
+### Other commands
 
 - `?help` - main help command
 - `?options` - to see the list of supported classes and HP modifiers
 - `?links` - to view some helpful links
 
-### Dependencies
+## Dependencies
 
+- [Python 3.7](https://docs.python.org/3.7/)
 - [discord.py v1.6.0](https://discordpy.readthedocs.io/en/v1.6.0/), a modern, easy to use, feature-rich, and async ready API wrapper for Discord
-- Python 3
+- See `requirements.txt` for full list of dependencies
 
-### Local Development
+## Local Development
 
 - Install dependencies with `pip install -r requirements.txt`
 - Run with `python3 bot.py`
 
-### Dontation/Support
+## Dontation/Support
 
 Hello, hello! This bot that I have made is just a little passion project of mine. Any [support or donation](https://paypal.me/addicteduser) is much appreciated to keep up with the hosting fees. Thank you very much!
 
