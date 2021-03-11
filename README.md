@@ -1,4 +1,4 @@
-![workflow](https://github.com/addicteduser/dnd-hp-calc-discordbot/actions/workflows/ci.yml/badge.svg)
+![workflow](https://github.com/addicteduser/dnd-hp-calc-discordbot/actions/workflows/ci.yml/badge.svg?branch=master)
 
 # Valron the HP Calculator
 
