@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/addicteduser/dnd-hp-calc-discordbot.svg?branch=master)](https://travis-ci.com/addicteduser/dnd-hp-calc-discordbot)
+![workflow](https://github.com/addicteduser/dnd-hp-calc-discordbot/actions/workflows/ci.yml/badge.svg)
 
 # Valron the HP Calculator
 

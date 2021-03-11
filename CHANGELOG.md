@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Update `.travis.yml` to install unit test dependencies.
+- Migrate CI from Travis CI to GitHub Actions.
 
 ## [1.6.0](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.5.1...1.6.0) - 2021-03-10
 
