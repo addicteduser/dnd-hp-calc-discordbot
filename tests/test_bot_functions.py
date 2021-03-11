@@ -2,10 +2,12 @@
 
 import pytest
 
-from bot import apply_hp_mods, calculate_base_hp
+from bot import (apply_hp_mods, calculate_base_hp, parse_input,
+                 parse_input_hp_mods)
 from utils.classes import Flags
 from utils.helper import get_class
 
+# (con_modifier, classes_and_levels) == (TEST_BUILDS[i][0], TEST_BUILDS[i][1])
 TEST_BUILDS = [(4, [(get_class('rogue'), 3),
                     (get_class('warlock'), 2),
                     (get_class('paladin'), 7),
@@ -69,6 +71,73 @@ FLAGS = [
     Flags(True, True, True, True)
 
 ]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "expected_classes_and_levels, expected_flags, input_classes_and_levels, input_hp_mods", [
+        (TEST_BUILDS[0][1], FLAGS[0], "rogue3/warlock2/paladin7/bard4", None),
+        (TEST_BUILDS[5][1], FLAGS[7], "p6/ds14", "t/hd/ba")
+    ]
+)
+async def test_parse_input(expected_classes_and_levels, expected_flags,
+                           input_classes_and_levels, input_hp_mods):
+    """Test parsing input.
+
+    Args:
+        expected_classes_and_levels (list(Class, int)): The expected list of tuples wherein each
+            element is the class and corresponding level.
+        expected_flags (Flag): The expected HP modifier flags.
+        input_classes_and_levels (str): The user input classes and levels.
+        input_hp_mods (str): The user input HP modifiers.
+
+    """
+    (classes_and_levels, flags) = await parse_input(
+        input_classes_and_levels, input_hp_mods)
+
+    for (i, class_and_level) in enumerate(classes_and_levels):
+        assert class_and_level[0].name == expected_classes_and_levels[i][0].name
+        assert class_and_level[1] == expected_classes_and_levels[i][1]
+
+    assert flags.no_error == expected_flags.no_error
+    assert flags.is_hilldwarf == expected_flags.is_hilldwarf
+    assert flags.axe_attuned == expected_flags.axe_attuned
+    assert flags.is_tough == expected_flags.is_tough
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "input_hp_mods", [
+        "random", "hilldwrf", "ax", "toug"
+    ]
+)
+async def test_parse_incorrect_input_hp_mods(input_hp_mods):
+    """Test parsing incorrect input HP modifiers.
+
+    Args:
+        input_hp_mods (str): The user input HP modifiers.
+
+    """
+    flags = await parse_input_hp_mods(input_hp_mods)
+    assert flags.no_error is False
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "input_classes_and_levels", [
+        "randomclass", "randomclass1", "paladin1/randomclass2", 'paladin 1'
+    ]
+)
+async def test_parse_incorrect_input_classes_and_levels(input_classes_and_levels):
+    """Test parsing incorrect input classes and levels.
+
+    Args:
+        input_classes_and_levels (str): The user input classes and levels.
+
+    """
+    (_, flags) = await parse_input(
+        input_classes_and_levels, None)
+    assert flags.no_error is False
 
 
 @pytest.mark.parametrize(
