@@ -39,11 +39,16 @@ Invite it to your Discord server with this [link](https://discordapp.com/api/oau
 - [Python 3.7](https://docs.python.org/3.7/)
 - [discord.py v1.6.0](https://discordpy.readthedocs.io/en/v1.6.0/), a modern, easy to use, feature-rich, and async ready API wrapper for Discord
 - See `requirements.txt` for full list of dependencies
+- For unit tests (see `requirements.txt`):
+  - [pytest](https://docs.pytest.org/en/stable/) for running unit tests.
+  - [pytest-asyncio](https://pypi.org/project/pytest-asyncio/) for testing asyncio code with pytest.
 
 ## Local Development
 
 - Install dependencies with `pip install -r requirements.txt`
-- Run with `python3 bot.py`
+- Run with `python bot.py`
+- Install unit test dependencies with `pip install -r test-requirements.txt`
+- Run unit tests with `pytest`
 
 ## Dontation/Support
 

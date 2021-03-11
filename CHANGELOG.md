@@ -30,7 +30,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.0...HEAD) - YYYY-MM-DD
 
-- No unreleased changes at the moment.
+### Added
+
+- Add `test-requirements.txt` for listing unit test dependencies.
+- Add unit tests on parsing user input.
+
+### Changed
+
+- Update `.travis.yml` to install unit test dependencies.
 
 ## [1.6.0](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.5.1...1.6.0) - 2021-03-10
 
