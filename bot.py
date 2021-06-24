@@ -46,8 +46,8 @@ async def help(ctx):
 
     """
     embed = helper.embed_builder(
-        bot.user.name, "Hello, my friend! I am Valron. Below is a guide on " +
-        "how I can help you compute for your AL D&D 5e character's hit points.")
+        bot.user.name, "Hello, my friend! I am Valron. Below is a guide on "
+        + "how I can help you compute for your AL D&D 5e character's hit points.")
     embed.add_field(name="Command",
                     value="`?hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`",
                     inline=False)
@@ -78,8 +78,8 @@ async def options(ctx):
 
     """
     embed = helper.embed_builder(
-        bot.user.name, "Hello, my friend! I am Valron. Here are the supported " +
-        "classes and HP modifiers for your reference")
+        bot.user.name, "Hello, my friend! I am Valron. Here are the supported "
+        + "classes and HP modifiers for your reference")
     embed.add_field(name="List of supported classes",
                     value=helper.alias_builder(constants.DND_ALIASES()),
                     inline=False)
@@ -104,8 +104,8 @@ async def links(ctx):
 
     """
     embed = helper.embed_builder(
-        bot.user.name, 'Hello, my friend! I am Valron. My wife has compiled a '
-        + 'list of helpful links for you.')
+        bot.user.name, 'Hello, my friend! I am Valron. My wife has compiled a ' +
+        'list of helpful links for you.')
     embed.add_field(name="Invite me to your server with this link",
                     value=f'[Click me!]({constants.DISCORD_INVITE_LINK})',
                     inline=False)
@@ -116,8 +116,8 @@ async def links(ctx):
                     value=f'[Click me!]({constants.GITHUB_LINK})',
                     inline=False)
     embed.add_field(name="Want to support me and my wife?",
-                    value=f'Click any of these: [PayPal]({constants.PAYPAL_LINK}) ' +
-                    '| [Ko-Fi]({constants.KOFI_LINK}) | [GCash]({constants.GCASH_QR_CODE})',
+                    value=f'Click any of these: [PayPal]({constants.PAYPAL_LINK}) '
+                    + f'| [Ko-Fi]({constants.KOFI_LINK}) | [GCash]({constants.GCASH_QR_CODE})',
                     inline=False)
     embed.set_footer(
         text='?help - main help command\n'
@@ -395,9 +395,9 @@ def bot_reply_builder(con_modifier, classes_and_levels, total_level, final_hp, f
 
     """
     if total_level > 20:
-        bot_reply = (f'Oof! {ctx.author.mention}, my friend, you have a level '
-                     + f'`{total_level}` character?  My wife says to double check its '
-                     + 'levels! But if you really want to know, a ')
+        bot_reply = (f'Oof! {ctx.author.mention}, my friend, you have a level ' +
+                     f'`{total_level}` character?  My wife says to double check its ' +
+                     'levels! But if you really want to know, a ')
     else:
         bot_reply = f'{ctx.author.mention}, my friend, a '
 
