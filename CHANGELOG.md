@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -->
 
-## [Unreleased](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.0...HEAD) - YYYY-MM-DD
+## [Unreleased](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.0...1.6.1) - 2021-06-24
 
 ### Added
 
@@ -38,6 +38,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Migrate CI from Travis CI to GitHub Actions.
+
+### Fixed
+
+- Fix linking to Ko-Fi and GCash.
 
 ## [1.6.0](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.5.1...1.6.0) - 2021-03-10
 
