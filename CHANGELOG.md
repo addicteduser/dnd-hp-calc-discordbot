@@ -28,9 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -->
 
-## [Unreleased](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.0...1.6.1) - 2021-06-24
+## [Unreleased](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.1...HEAD) - YYYY-MM-DD
 
-## [1.6.1](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.0...1.6.1) - 2021-06-24
+## [1.6.1](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.0...1.6.1) - 2021-10-27
 
 ### Added
 
