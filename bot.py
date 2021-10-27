@@ -14,6 +14,7 @@ import re
 import typing
 
 import discord
+from discord.errors import HTTPException
 from discord.ext import commands
 from discord.utils import get
 from dotenv import load_dotenv
@@ -183,7 +184,7 @@ async def hp(
 
     # Send bot reply
     if flags.no_error:
-        bot_reply = await bot_reply_builder(
+        bot_reply = bot_reply_builder(
             con_modifier, classes_and_levels, total_level, final_hp, flags, ctx
         )
         await bot_typing(ctx, 1)
@@ -406,7 +407,7 @@ def apply_hp_mods(partial_hp, total_level, flags):
     return partial_hp
 
 
-async def bot_reply_builder(
+def bot_reply_builder(
     con_modifier, classes_and_levels, total_level, final_hp, flags, ctx
 ):
     """Returns the formatted reply of the bot.
@@ -451,17 +452,20 @@ async def bot_reply_builder(
 
     bot_reply = bot_reply + f"has `{final_hp}` hit points."
 
-    guilds = os.getenv("GUILDS")
-    member = os.getenv("MEMBER1")
-    if guilds:
-        if (str(ctx.guild.id) in guilds) and (con_modifier < 0):
-            summon = await ctx.guild.fetch_member(int(member))
-            if summon:
-                bot_reply = (
-                    bot_reply
-                    + "\n\nOof! You have a negative Constitution modifier! "
-                    + f"My wife tells me that I should summon {summon.mention}!"
-                )
+    # guilds = os.getenv("GUILDS")
+    # member = os.getenv("MEMBER1")
+    # if guilds:
+    #     if (str(ctx.guild.id) in guilds) and (con_modifier < 0):
+    #         try:
+    #             summon = await ctx.guild.fetch_member(int(member))
+    #             if summon:
+    #                 bot_reply = (
+    #                     bot_reply
+    #                     + "\n\nOof! You have a negative Constitution modifier! "
+    #                     + f"My wife tells me that I should summon {summon.mention}!"
+    #                 )
+    #         except HTTPException:
+    #             pass
 
     return bot_reply
 
