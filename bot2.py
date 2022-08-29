@@ -36,12 +36,12 @@ bot = commands.Bot(
 )
 
 
-####################
-## SLASH COMMANDS ##
-####################
-@bot.slash_command()
-async def help(inter: disnake.CommandInteraction):
-    """Show a guide on how to use Valron"""
+##################
+## HELP COMMAND ##
+##################
+async def build_help_embed():
+    """Build the embed for the `help` command."""
+
     embed = helper.embed_builder(
         bot.user.name,
         "Hello, my friend! I am Valron. Below is a guide on "
@@ -49,25 +49,44 @@ async def help(inter: disnake.CommandInteraction):
     )
     embed.add_field(
         name="Command",
-        value="`?hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`",
+        value="`/hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`",
         inline=False,
     )
-    embed.add_field(name="Single Class Example", value="`?hp 3 fighter1`", inline=False)
+    embed.add_field(name="Single Class Example", value="`/hp 3 fighter1`", inline=False)
     embed.add_field(
-        name="Multiclass Example", value="`?hp 3 fighter1/barb2/paladin1`", inline=False
+        name="Multiclass Example", value="`/hp 3 fighter1/barb2/paladin1`", inline=False
     )
     embed.add_field(
         name="Example with HP modifiers",
-        value="`?hp 3 fighter1/barb2/paladin1 tough/hilldwarf`",
+        value="`/hp 3 fighter1/barb2/paladin1 tough/hilldwarf`",
         inline=False,
     )
     embed.set_footer(
-        text="?options - to see the list of supported classes and HP modifiers\n"
-        "?links - to view some helpful links"
+        text="/options - to see the list of supported classes and HP modifiers\n"
+        "/links - to view some helpful links"
     )
+
+    return embed
+
+
+@bot.command()
+async def help(ctx: commands.Context):
+    """Show a guide on how to use Valron"""
+    embed = await build_help_embed()
+    await bot_typing(ctx, 1)
+    await ctx.send(embed=embed)
+
+
+@bot.slash_command()
+async def help(inter: disnake.CommandInteraction):
+    """Show a guide on how to use Valron"""
+    embed = await build_help_embed()
     await inter.send(embed=embed)
 
 
+#####################
+## OPTIONS COMMAND ##
+#####################
 @bot.slash_command()
 async def options(inter: disnake.CommandInteraction):
     """Show list of supported classes and HP modifiers."""
@@ -454,16 +473,16 @@ async def parse_input_classes_and_levels(
     return (classes_and_levels, flags)
 
 
-# async def bot_typing(ctx, time):
-#     """Triggers 'Valron is typing...' in Discord.
+async def bot_typing(ctx, time):
+    """Triggers 'Valron is typing...' in Discord.
 
-#     Args:
-#         ctx (discord.ext.commands.Context): See discordpy docs.
-#         time (int): Number of seconds to wait.
+    Args:
+        ctx (discord.ext.commands.Context): See discordpy docs.
+        time (int): Number of seconds to wait.
 
-#     """
-#     await ctx.trigger_typing()
-#     await asyncio.sleep(time)
+    """
+    await ctx.trigger_typing()
+    await asyncio.sleep(time)
 
 
 def calculate_base_hp(classes_and_levels, con_modifier):
