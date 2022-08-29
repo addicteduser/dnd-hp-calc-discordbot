@@ -187,8 +187,26 @@ async def hp(
         bot_reply = bot_reply_builder(
             con_modifier, classes_and_levels, total_level, final_hp, flags, ctx
         )
+
+        bot_reply = (
+            bot_reply
+            + f"\n\nBy the way, my wife would like to remind you "
+            + "that we will be migrating to Slash Commands (`/`) "
+            + "by <t:1661958000:f> (<t:1661958000:R>). "
+            + "See [Discord's blog post](https://discord.com/blog/welcome-to-the-new-era-of-discord-apps/) "
+            + "for more info about the change."
+        )
+
+        embed = helper.embed_builder(bot.user.name, bot_reply, show_thumbnail=False)
+        embed.set_footer(
+            text="?help - main help command\n"
+            "?options - to see the list of supported classes and HP modifiers\n"
+            "?links - to view some helpful links"
+        )
+
         await bot_typing(ctx, 1)
-        await ctx.send(bot_reply)
+        await ctx.send(embed=embed)
+        # await ctx.send(bot_reply)
 
     # toc = time.perf_counter()
     # print(f"Performance: {toc - tic:0.4f} seconds")
