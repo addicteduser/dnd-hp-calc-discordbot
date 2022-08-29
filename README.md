@@ -18,28 +18,28 @@ Invite it to your Discord server with this [link](https://discordapp.com/api/oau
 
 ### Command
 
-`?hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`
+`/hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`
 
 #### Example
 
-`?hp 3 fighter1/barb2/paladin1`
+`/hp 3 fighter1/barb2/paladin1`
 
 #### Example with HP modifiers
 
-`?hp 3 fighter1/barb2/paladin1 tough/hilldwarf`
+`/hp 3 fighter1/barb2/paladin1 tough/hilldwarf`
 
 ### Other commands
 
-- `?help` - main help command
-- `?options` - to see the list of supported classes and HP modifiers
-- `?links` - to view some helpful links
+- `/help` - main help command
+- `/options` - to see the list of supported classes and HP modifiers
+- `/links` - to view some helpful links
 
 ## Dependencies
 
-- [Python 3.7](https://docs.python.org/3.7/)
-- [discord.py v1.6.0](https://discordpy.readthedocs.io/en/v1.6.0/), a modern, easy to use, feature-rich, and async ready API wrapper for Discord
+- [Python 3.8](https://docs.python.org/3.8/)
+- [disnake.py v2.5.2](https://docs.disnake.dev/en/v2.5.2/), a modern, easy to use, feature-rich, and async ready API wrapper for Discord
 - See `requirements.txt` for full list of dependencies
-- For unit tests (see `test-requirements.txt`):
+- For unit tests (see `requirements-test.txt`):
   - [pytest](https://docs.pytest.org/en/stable/) for running unit tests.
   - [pytest-asyncio](https://pypi.org/project/pytest-asyncio/) for testing asyncio code with pytest.
 
@@ -47,7 +47,7 @@ Invite it to your Discord server with this [link](https://discordapp.com/api/oau
 
 - Install dependencies with `pip install -r requirements.txt`
 - Run with `python bot.py`
-- Install unit test dependencies with `pip install -r test-requirements.txt`
+- Install unit test dependencies with `pip install -r requirements-test.txt`
 - Run unit tests with `pytest`
 
 ## Dontation/Support

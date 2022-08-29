@@ -4,6 +4,7 @@ This module provides helper functions.
 """
 
 import disnake
+from disnake.ext import commands
 import utils.constants as constants
 
 
@@ -52,7 +53,9 @@ def alias_builder(alias_list):
     return result[:-1]
 
 
-def valron_doesnt_know(inter, the_thing):
+def valron_doesnt_know(
+    the_thing, ctx: commands.Context = None, inter: disnake.CommandInteraction = None
+):
     """Returns the bot's reply when it does not recognize an input.
 
     Args:
@@ -63,21 +66,29 @@ def valron_doesnt_know(inter, the_thing):
         str: Formatted reply of the bot.
 
     """
+    name = ""
+
+    if ctx:
+        name = ctx.author.mention
+
+    if inter:
+        name = inter.author.mention
+
     return (
-        f"Oof! {inter.author.mention}, my friend, I don't know the "
-        + f"{the_thing}! My wife says to use `?options` to see your "
-        + "classes or HP modifier options or `?help` for more information."
+        f"Oof! {name}, my friend, I don't know the {the_thing}! "
+        + "My wife says to use `/options` to see your classes "
+        + "or HP modifier options or `/help` for more information."
     )
 
 
 ###################
 ## OTHER HELPERS ##
 ###################
-# def update_guild_counter(num_guilds):
-#     """Updates status displaying the number of Discord servers the bot belongs in."""
-#     return discord.Activity(
-#         name=f"D&D 5e in {num_guilds} guilds | ?help", type=discord.ActivityType.playing
-#     )
+def update_guild_counter(num_guilds):
+    """Updates status displaying the number of Discord servers the bot belongs in."""
+    return disnake.Activity(
+        name=f"D&D 5e in {num_guilds} guilds | /help", type=disnake.ActivityType.playing
+    )
 
 
 def get_class(alias):
