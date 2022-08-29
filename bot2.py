@@ -87,9 +87,8 @@ async def help(inter: disnake.CommandInteraction):
 #####################
 ## OPTIONS COMMAND ##
 #####################
-@bot.slash_command()
-async def options(inter: disnake.CommandInteraction):
-    """Show list of supported classes and HP modifiers."""
+async def build_options_embed():
+    """Build the embed for the `options` command."""
     embed = helper.embed_builder(
         bot.user.name,
         "Hello, my friend! I am Valron. Here are the supported "
@@ -108,6 +107,22 @@ async def options(inter: disnake.CommandInteraction):
     embed.set_footer(
         text="?help - main help command\n" "?links - to view some helpful links"
     )
+
+    return embed
+
+
+@bot.command()
+async def options(ctx: commands.Context):
+    """Show list of supported classes and HP modifiers"""
+    embed = await build_options_embed()
+    await bot_typing(ctx, 1)
+    await ctx.send(embed=embed)
+
+
+@bot.slash_command()
+async def options(inter: disnake.CommandInteraction):
+    """Show list of supported classes and HP modifiers"""
+    embed = await build_options_embed()
     await inter.send(embed=embed)
 
 
