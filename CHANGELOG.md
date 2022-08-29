@@ -30,6 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.1...HEAD) - YYYY-MM-DD
 
+## [1.6.2](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.1...1.6.2) - 2022-08-11
+
+### Changed
+
+- Send HP calculation reply inside an embed.
+- Append reminder about [migrating to Slash Commands](https://discord.com/blog/welcome-to-the-new-era-of-discord-apps/) by August 31, 2022.
+
 ## [1.6.1](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.0...1.6.1) - 2021-10-27
 
 ### Added

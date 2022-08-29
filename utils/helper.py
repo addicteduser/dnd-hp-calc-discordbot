@@ -103,7 +103,7 @@ def get_class(alias):
     return dnd_class
 
 
-def embed_builder(valron, description):
+def embed_builder(valron, description, show_thumbnail=True):
     """Return the base embed.
 
     Args:
