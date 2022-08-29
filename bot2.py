@@ -40,7 +40,7 @@ bot = commands.Bot(
 ## HELP COMMAND ##
 ##################
 async def build_help_embed():
-    """Build the embed for the `help` command."""
+    """Build the embed for the `help` command"""
 
     embed = helper.embed_builder(
         bot.user.name,
@@ -63,7 +63,7 @@ async def build_help_embed():
     )
     embed.set_footer(
         text="/options - to see the list of supported classes and HP modifiers\n"
-        "/links - to view some helpful links"
+        + "/links - to view some helpful links"
     )
 
     return embed
@@ -88,7 +88,7 @@ async def help(inter: disnake.CommandInteraction):
 ## OPTIONS COMMAND ##
 #####################
 async def build_options_embed():
-    """Build the embed for the `options` command."""
+    """Build the embed for the `options` command"""
     embed = helper.embed_builder(
         bot.user.name,
         "Hello, my friend! I am Valron. Here are the supported "
@@ -105,7 +105,7 @@ async def build_options_embed():
         inline=False,
     )
     embed.set_footer(
-        text="?help - main help command\n" "?links - to view some helpful links"
+        text="/help - main help command\n" + "/links - to view some helpful links"
     )
 
     return embed
@@ -126,9 +126,11 @@ async def options(inter: disnake.CommandInteraction):
     await inter.send(embed=embed)
 
 
-@bot.slash_command()
-async def links(inter: disnake.CommandInteraction):
-    """Show invite link and means to support the bot's development"""
+###################
+## LINKS COMMAND ##
+###################
+async def build_links_embed():
+    """Build the embed for the `links` command"""
     embed = helper.embed_builder(
         bot.user.name,
         "Hello, my friend! I am Valron. My wife has compiled a "
@@ -156,9 +158,25 @@ async def links(inter: disnake.CommandInteraction):
         inline=False,
     )
     embed.set_footer(
-        text="?help - main help command\n"
-        "?options - to see the list of supported classes and HP modifiers"
+        text="/help - main help command\n"
+        + "/options - to see the list of supported classes and HP modifiers"
     )
+
+    return embed
+
+
+@bot.command()
+async def links(ctx: commands.Context):
+    """Show invite link and means to support Valron's development"""
+    embed = await build_links_embed()
+    await bot_typing(ctx, 1)
+    await ctx.send(embed=embed)
+
+
+@bot.slash_command()
+async def links(inter: disnake.CommandInteraction):
+    """Show invite link and means to support Valron's development"""
+    embed = await build_links_embed()
     await inter.send(embed=embed)
 
 
