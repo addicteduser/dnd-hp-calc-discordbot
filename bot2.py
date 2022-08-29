@@ -39,6 +39,21 @@ bot = commands.Bot(
 ##################
 ## HELP COMMAND ##
 ##################
+@bot.command()
+async def help(ctx: commands.Context):
+    """Show a guide on how to use Valron"""
+    embed = await build_help_embed()
+    await bot_typing(ctx, 1)
+    await ctx.send(embed=embed)
+
+
+@bot.slash_command()
+async def help(inter: disnake.CommandInteraction):
+    """Show a guide on how to use Valron"""
+    embed = await build_help_embed()
+    await inter.send(embed=embed)
+
+
 async def build_help_embed():
     """Build the embed for the `help` command"""
 
@@ -69,24 +84,24 @@ async def build_help_embed():
     return embed
 
 
+#####################
+## OPTIONS COMMAND ##
+#####################
 @bot.command()
-async def help(ctx: commands.Context):
-    """Show a guide on how to use Valron"""
-    embed = await build_help_embed()
+async def options(ctx: commands.Context):
+    """Show list of supported classes and HP modifiers"""
+    embed = await build_options_embed()
     await bot_typing(ctx, 1)
     await ctx.send(embed=embed)
 
 
 @bot.slash_command()
-async def help(inter: disnake.CommandInteraction):
-    """Show a guide on how to use Valron"""
-    embed = await build_help_embed()
+async def options(inter: disnake.CommandInteraction):
+    """Show list of supported classes and HP modifiers"""
+    embed = await build_options_embed()
     await inter.send(embed=embed)
 
 
-#####################
-## OPTIONS COMMAND ##
-#####################
 async def build_options_embed():
     """Build the embed for the `options` command"""
     embed = helper.embed_builder(
@@ -111,24 +126,24 @@ async def build_options_embed():
     return embed
 
 
+###################
+## LINKS COMMAND ##
+###################
 @bot.command()
-async def options(ctx: commands.Context):
-    """Show list of supported classes and HP modifiers"""
-    embed = await build_options_embed()
+async def links(ctx: commands.Context):
+    """Show invite link and means to support Valron's development"""
+    embed = await build_links_embed()
     await bot_typing(ctx, 1)
     await ctx.send(embed=embed)
 
 
 @bot.slash_command()
-async def options(inter: disnake.CommandInteraction):
-    """Show list of supported classes and HP modifiers"""
-    embed = await build_options_embed()
+async def links(inter: disnake.CommandInteraction):
+    """Show invite link and means to support Valron's development"""
+    embed = await build_links_embed()
     await inter.send(embed=embed)
 
 
-###################
-## LINKS COMMAND ##
-###################
 async def build_links_embed():
     """Build the embed for the `links` command"""
     embed = helper.embed_builder(
@@ -165,21 +180,9 @@ async def build_links_embed():
     return embed
 
 
-@bot.command()
-async def links(ctx: commands.Context):
-    """Show invite link and means to support Valron's development"""
-    embed = await build_links_embed()
-    await bot_typing(ctx, 1)
-    await ctx.send(embed=embed)
-
-
-@bot.slash_command()
-async def links(inter: disnake.CommandInteraction):
-    """Show invite link and means to support Valron's development"""
-    embed = await build_links_embed()
-    await inter.send(embed=embed)
-
-
+################
+## HP COMMAND ##
+################
 @bot.slash_command()
 async def hp(
     inter: disnake.CommandInteraction,
@@ -215,119 +218,6 @@ async def hp(
 ##################
 ## BOT COMMANDS ##
 ##################
-# @bot.command()
-# async def help2(ctx):
-#     """Displays an embed on how to use the bot.
-
-#     Args:
-#         ctx (discord.ext.commands.Context): See discordpy docs.
-
-#     Invoked via: ?help
-
-#     """
-#     embed = helper.embed_builder(
-#         bot.user.name,
-#         "Hello, my friend! I am Valron. Below is a guide on "
-#         + "how I can help you compute for your AL D&D 5e character's hit points.",
-#     )
-#     embed.add_field(
-#         name="Command",
-#         value="`?hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`",
-#         inline=False,
-#     )
-#     embed.add_field(name="Single Class Example", value="`?hp 3 fighter1`", inline=False)
-#     embed.add_field(
-#         name="Multiclass Example", value="`?hp 3 fighter1/barb2/paladin1`", inline=False
-#     )
-#     embed.add_field(
-#         name="Example with HP modifiers",
-#         value="`?hp 3 fighter1/barb2/paladin1 tough/hilldwarf`",
-#         inline=False,
-#     )
-#     embed.set_footer(
-#         text="?options - to see the list of supported classes and HP modifiers\n"
-#         "?links - to view some helpful links"
-#     )
-#     await bot_typing(ctx, 1)
-#     await ctx.send(embed=embed)
-
-
-# @bot.command()
-# async def options(ctx):
-#     """Displays an embed regarding the supported classes and HP modifiers.
-
-#     Args:
-#         ctx (discord.ext.commands.Context): See discordpy docs.
-
-#     Invoked via: ?options
-
-#     """
-#     embed = helper.embed_builder(
-#         bot.user.name,
-#         "Hello, my friend! I am Valron. Here are the supported "
-#         + "classes and HP modifiers for your reference",
-#     )
-#     embed.add_field(
-#         name="List of supported classes",
-#         value=helper.alias_builder(constants.DND_ALIASES()),
-#         inline=False,
-#     )
-#     embed.add_field(
-#         name="List of supported HP modifiers",
-#         value=helper.alias_builder(constants.HP_MOD_ALIASES()),
-#         inline=False,
-#     )
-#     embed.set_footer(
-#         text="?help - main help command\n" "?links - to view some helpful links"
-#     )
-#     await bot_typing(ctx, 1)
-#     await ctx.send(embed=embed)
-
-
-# @bot.command()
-# async def links(ctx):
-#     """Displays an embed showing various links.
-
-#     Args:
-#         ctx (discord.ext.commands.Context): See discordpy docs.
-
-#     Invoked via: ?links
-
-#     """
-#     embed = helper.embed_builder(
-#         bot.user.name,
-#         "Hello, my friend! I am Valron. My wife has compiled a "
-#         + "list of helpful links for you.",
-#     )
-#     embed.add_field(
-#         name="Invite me to your server with this link",
-#         value=f"[Click me!]({constants.DISCORD_INVITE_LINK})",
-#         inline=False,
-#     )
-#     embed.add_field(
-#         name="Find out what's new with me from the support discord server",
-#         value=f"[Click me!]({constants.SUPPORT_SERVER_LINK})",
-#         inline=False,
-#     )
-#     embed.add_field(
-#         name="See how I was made",
-#         value=f"[Click me!]({constants.GITHUB_LINK})",
-#         inline=False,
-#     )
-#     embed.add_field(
-#         name="Want to support me and my wife?",
-#         value=f"Click any of these: [PayPal]({constants.PAYPAL_LINK}) "
-#         + f"| [Ko-Fi]({constants.KOFI_LINK}) | [GCash]({constants.GCASH_QR_CODE})",
-#         inline=False,
-#     )
-#     embed.set_footer(
-#         text="?help - main help command\n"
-#         "?options - to see the list of supported classes and HP modifiers"
-#     )
-#     await bot_typing(ctx, 1)
-#     await ctx.send(embed=embed)
-
-
 # @bot.command()
 # async def hp(
 #     ctx,
