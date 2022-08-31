@@ -28,7 +28,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -->
 
-## [Unreleased](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.1...HEAD) - YYYY-MM-DD
+## [Unreleased](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/2.0.0...HEAD) - YYYY-MM-DD
+
+## [Unreleased](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.2...2.0.0) - 2022-08-31
+
+### Added
+
+- Migrate to use [slash command (`/`)](https://discord.com/blog/welcome-to-the-new-era-of-discord-apps/).
+- Normal bot commands also work when mentioning the bot.
+
+### Removed
+
+- Remove support for prefix commands.
 
 ## [1.6.2](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.1...1.6.2) - 2022-08-11
 

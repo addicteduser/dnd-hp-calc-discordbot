@@ -3,8 +3,7 @@
 This module provides helper functions.
 """
 
-import disnake
-from disnake.ext import commands
+import discord
 import utils.constants as constants
 
 
@@ -22,10 +21,10 @@ def classes_and_levels_builder(classes_and_levels):
         str: Formatted classes and levels string.
 
     """
-    result = ""
+    result = ''
 
     for class_and_level in classes_and_levels:
-        result = result + f"{class_and_level[0].name} {class_and_level[1]} / "
+        result = result + f'{class_and_level[0].name} {class_and_level[1]} / '
 
     return result[:-3]
 
@@ -40,22 +39,20 @@ def alias_builder(alias_list):
         str: Formatted alias list string.
 
     """
-    result = ""
+    result = ''
 
     for aliases in alias_list:
-        result = result + f"- `{aliases[0]}` ("
+        result = result + f'- `{aliases[0]}` ('
         aliases.pop(0)
         for alias in aliases:
-            result = result + f"`{alias}`, "
+            result = result + f'`{alias}`, '
 
-        result = result[:-2] + ")\n"
+        result = result[:-2] + ')\n'
 
     return result[:-1]
 
 
-def valron_doesnt_know(
-    the_thing, ctx: commands.Context = None, inter: disnake.CommandInteraction = None
-):
+def valron_doesnt_know(ctx, the_thing):
     """Returns the bot's reply when it does not recognize an input.
 
     Args:
@@ -66,29 +63,21 @@ def valron_doesnt_know(
         str: Formatted reply of the bot.
 
     """
-    name = ""
-
-    if ctx:
-        name = ctx.author.mention
-
-    if inter:
-        name = inter.author.mention
-
-    return (
-        f"Oof! {name}, my friend, I don't know the {the_thing}! "
-        + "My wife says to use `/options` to see your classes "
-        + "or HP modifier options or `/help` for more information."
-    )
+    return (f"Oof! {ctx.author.mention}, my friend, I don't know the " +
+            f"{the_thing}! My wife says to use `?options` to see your " +
+            "classes or HP modifier options or `?help` for more information.")
 
 
 ###################
 ## OTHER HELPERS ##
 ###################
 def update_guild_counter(num_guilds):
-    """Updates status displaying the number of Discord servers the bot belongs in."""
-    return disnake.Activity(
-        name=f"D&D 5e in {num_guilds} guilds | /help", type=disnake.ActivityType.playing
-    )
+    """Updates status displaying the number of Discord servers the bot belongs in.
+
+    """
+    return discord.Activity(
+        name=f'D&D 5e in {num_guilds} guilds | ?help',
+        type=discord.ActivityType.playing)
 
 
 def get_class(alias):
@@ -114,7 +103,7 @@ def get_class(alias):
     return dnd_class
 
 
-def embed_builder(valron, description, show_thumbnail=True):
+def embed_builder(valron, description):
     """Return the base embed.
 
     Args:
@@ -125,12 +114,13 @@ def embed_builder(valron, description, show_thumbnail=True):
         discord.Embed: A discord Embed.
 
     """
-    embed = disnake.Embed(
-        title="", url=constants.TOP_GG_LINK, description=description, color=0x1ABC9C
-    )
-    embed.set_author(
-        name=f"{valron}", url=constants.TOP_GG_LINK, icon_url=f"{constants.IMG_LINK}"
-    )
-    embed.set_thumbnail(url=f"{constants.IMG_LINK}")
+    embed = discord.Embed(title='',
+                          url=constants.TOP_GG_LINK,
+                          description=description,
+                          color=0x1abc9c)
+    embed.set_author(name=f'{valron}',
+                     url=constants.TOP_GG_LINK,
+                     icon_url=f'{constants.IMG_LINK}')
+    embed.set_thumbnail(url=f'{constants.IMG_LINK}')
 
     return embed

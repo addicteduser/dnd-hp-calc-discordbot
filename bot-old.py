@@ -13,10 +13,10 @@ import re
 # import time
 import typing
 
-import disnake
-from disnake.errors import HTTPException
-from disnake.ext import commands
-from disnake.utils import get
+import discord
+from discord.errors import HTTPException
+from discord.ext import commands
+from discord.utils import get
 from dotenv import load_dotenv
 from utils import constants, helper
 from utils.classes import Flags
@@ -24,39 +24,30 @@ from utils.classes import Flags
 # Load environment variables
 load_dotenv()
 
-command_prefix = commands.when_mentioned
-description = "A bot for calculating your D&D 5e character's average hit points."
-intents = disnake.Intents.default()
+
+intents = discord.Intents.default()
 bot = commands.Bot(
+    command_prefix="?",
     case_insensitive=True,
-    command_prefix=command_prefix,
-    description=description,
+    description="A bot for calculating an AL D&D 5e character's hit points.",
     help_command=None,
     intents=intents,
 )
 
 
 ##################
-## HELP COMMAND ##
+## BOT COMMANDS ##
 ##################
 @bot.command()
-async def help(ctx: commands.Context):
-    """Show a guide on how to use Valron"""
-    embed = await build_help_embed()
-    await bot_typing(ctx, 1)
-    await ctx.send(embed=embed)
+async def help2(ctx):
+    """Displays an embed on how to use the bot.
 
+    Args:
+        ctx (discord.ext.commands.Context): See discordpy docs.
 
-@bot.slash_command()
-async def help(inter: disnake.CommandInteraction):
-    """Show a guide on how to use Valron"""
-    embed = await build_help_embed()
-    await inter.send(embed=embed)
+    Invoked via: ?help
 
-
-async def build_help_embed():
-    """Build the embed for the `help` command"""
-
+    """
     embed = helper.embed_builder(
         bot.user.name,
         "Hello, my friend! I am Valron. Below is a guide on "
@@ -64,46 +55,36 @@ async def build_help_embed():
     )
     embed.add_field(
         name="Command",
-        value="`/hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`",
+        value="`?hp <con_modifier> <classA#/classB#/etc> [hp_mod1/hp_mod2/etc]`",
         inline=False,
     )
-    embed.add_field(name="Single Class Example", value="`/hp 3 fighter1`", inline=False)
+    embed.add_field(name="Single Class Example", value="`?hp 3 fighter1`", inline=False)
     embed.add_field(
-        name="Multiclass Example", value="`/hp 3 fighter1/barb2/paladin1`", inline=False
+        name="Multiclass Example", value="`?hp 3 fighter1/barb2/paladin1`", inline=False
     )
     embed.add_field(
         name="Example with HP modifiers",
-        value="`/hp 3 fighter1/barb2/paladin1 tough/hilldwarf`",
+        value="`?hp 3 fighter1/barb2/paladin1 tough/hilldwarf`",
         inline=False,
     )
     embed.set_footer(
-        text="/options - to see the list of supported classes and HP modifiers\n"
-        + "/links - to view some helpful links"
+        text="?options - to see the list of supported classes and HP modifiers\n"
+        "?links - to view some helpful links"
     )
-
-    return embed
-
-
-#####################
-## OPTIONS COMMAND ##
-#####################
-@bot.command()
-async def options(ctx: commands.Context):
-    """Show list of supported classes and HP modifiers"""
-    embed = await build_options_embed()
     await bot_typing(ctx, 1)
     await ctx.send(embed=embed)
 
 
-@bot.slash_command()
-async def options(inter: disnake.CommandInteraction):
-    """Show list of supported classes and HP modifiers"""
-    embed = await build_options_embed()
-    await inter.send(embed=embed)
+@bot.command()
+async def options(ctx):
+    """Displays an embed regarding the supported classes and HP modifiers.
 
+    Args:
+        ctx (discord.ext.commands.Context): See discordpy docs.
 
-async def build_options_embed():
-    """Build the embed for the `options` command"""
+    Invoked via: ?options
+
+    """
     embed = helper.embed_builder(
         bot.user.name,
         "Hello, my friend! I am Valron. Here are the supported "
@@ -120,32 +101,22 @@ async def build_options_embed():
         inline=False,
     )
     embed.set_footer(
-        text="/help - main help command\n" + "/links - to view some helpful links"
+        text="?help - main help command\n" "?links - to view some helpful links"
     )
-
-    return embed
-
-
-###################
-## LINKS COMMAND ##
-###################
-@bot.command()
-async def links(ctx: commands.Context):
-    """Show invite link and means to support Valron's development"""
-    embed = await build_links_embed()
     await bot_typing(ctx, 1)
     await ctx.send(embed=embed)
 
 
-@bot.slash_command()
-async def links(inter: disnake.CommandInteraction):
-    """Show invite link and means to support Valron's development"""
-    embed = await build_links_embed()
-    await inter.send(embed=embed)
+@bot.command()
+async def links(ctx):
+    """Displays an embed showing various links.
 
+    Args:
+        ctx (discord.ext.commands.Context): See discordpy docs.
 
-async def build_links_embed():
-    """Build the embed for the `links` command"""
+    Invoked via: ?links
+
+    """
     embed = helper.embed_builder(
         bot.user.name,
         "Hello, my friend! I am Valron. My wife has compiled a "
@@ -173,70 +144,36 @@ async def build_links_embed():
         inline=False,
     )
     embed.set_footer(
-        text="/help - main help command\n"
-        + "/options - to see the list of supported classes and HP modifiers"
+        text="?help - main help command\n"
+        "?options - to see the list of supported classes and HP modifiers"
     )
+    await bot_typing(ctx, 1)
+    await ctx.send(embed=embed)
 
-    return embed
 
-
-################
-## HP COMMAND ##
-################
 @bot.command()
 async def hp(
-    ctx: commands.Context,
+    ctx,
     con_modifier: int,
     input_classes_and_levels: str,
-    input_hp_mods: str = None,
+    input_hp_mods: typing.Optional[str] = None,
 ):
-    """Calculate my character's HP"""
-    bot_reply = await build_hp_embed(
-        con_modifier, input_classes_and_levels, input_hp_mods, ctx=ctx
-    )
-    if bot_reply is not None:
-        await bot_typing(ctx, 1)
-        await ctx.send(bot_reply)
+    """Shows the formatted string showing the classes, levels, HP mods, and calculated hit points.
 
+    Args:
+        ctx (discord.ext.commands.Context): See discordpy docs.
+        con_modifier (int): The constitution modifer.
+        input_classes_and_levels (str): The input classes and levels.
+        input_hp_mods (str): The input HP modifiers.
 
-@bot.slash_command()
-async def hp(
-    inter: disnake.CommandInteraction,
-    con_modifier: int = commands.Param(
-        name="constitution-modifier",
-        description="Your character's constitution modifier",
-    ),
-    input_classes_and_levels: str = commands.Param(
-        name="classes-and-levels",
-        description="Your character's classes and levels (use `/help` for more info)",
-    ),
-    input_hp_mods: str = commands.Param(
-        name="hp-modifiers",
-        description="Your character's HP modifiers (use `/help` for more info)",
-        default=None,
-    ),
-):
-    """Calculate my character's HP"""
-    bot_reply = await build_hp_embed(
-        con_modifier, input_classes_and_levels, input_hp_mods, inter=inter
-    )
-    if bot_reply is not None:
-        await inter.send(bot_reply)
+    Invoked via: ?hp con_modifier input_classes_and_levels input_hp_mods
 
-
-async def build_hp_embed(
-    con_modifier: int,
-    input_classes_and_levels: str,
-    input_hp_mods: str = None,
-    ctx: commands.Context = None,
-    inter: disnake.CommandInteraction = None,
-):
-    """Build the embed for the `hp` command"""
+    """
     # tic = time.perf_counter()
 
     # Parse input
     (classes_and_levels, flags) = await parse_input(
-        input_classes_and_levels, input_hp_mods, ctx=ctx, inter=inter
+        input_classes_and_levels, input_hp_mods, ctx
     )
 
     # Get base HP
@@ -245,35 +182,40 @@ async def build_hp_embed(
     # Apply HP modifiers
     final_hp = apply_hp_mods(partial_hp, total_level, flags)
 
-    # toc = time.perf_counter()
-    # print(f"Performance: {toc - tic:0.4f} seconds")
-
     # Send bot reply
     if flags.no_error:
         bot_reply = bot_reply_builder(
-            con_modifier,
-            classes_and_levels,
-            total_level,
-            final_hp,
-            flags,
-            ctx=ctx,
-            inter=inter,
+            con_modifier, classes_and_levels, total_level, final_hp, flags, ctx
         )
-        # embed = helper.embed_builder(bot.user.name, bot_reply, show_thumbnail=False)
-        # embed.set_footer(
-        #     text="?help - main help command\n"
-        #     "?options - to see the list of supported classes and HP modifiers\n"
-        #     "?links - to view some helpful links"
-        # )
-        return bot_reply
+
+        bot_reply = (
+            bot_reply
+            + f"\n\nBy the way, my wife would like to remind you "
+            + "that we will be migrating to Slash Commands (`/`) "
+            + "by <t:1661958000:f> (<t:1661958000:R>). "
+            + "See [Discord's blog post](https://discord.com/blog/welcome-to-the-new-era-of-discord-apps/) "
+            + "for more info about the change."
+        )
+
+        embed = helper.embed_builder(bot.user.name, bot_reply, show_thumbnail=False)
+        embed.set_footer(
+            text="?help - main help command\n"
+            "?options - to see the list of supported classes and HP modifiers\n"
+            "?links - to view some helpful links"
+        )
+
+        await bot_typing(ctx, 1)
+        await ctx.send(embed=embed)
+        # await ctx.send(bot_reply)
+
+    # toc = time.perf_counter()
+    # print(f"Performance: {toc - tic:0.4f} seconds")
 
 
-async def parse_input(
-    input_classes_and_levels,
-    input_hp_mods,
-    ctx: commands.Context = None,
-    inter: disnake.CommandInteraction = None,
-):
+######################
+## HELPER FUNCTIONS ##
+######################
+async def parse_input(input_classes_and_levels, input_hp_mods, ctx=None):
     """Parses the input_classes_and_levels and input_hp_mods.
 
     Args:
@@ -287,17 +229,11 @@ async def parse_input(
             is the collection of HP modifier flags.
 
     """
-    flags = await parse_input_hp_mods(input_hp_mods, ctx=ctx, inter=inter)
-    return await parse_input_classes_and_levels(
-        input_classes_and_levels, flags, ctx=ctx, inter=inter
-    )
+    flags = await parse_input_hp_mods(input_hp_mods, ctx)
+    return await parse_input_classes_and_levels(input_classes_and_levels, flags, ctx)
 
 
-async def parse_input_hp_mods(
-    input_hp_mods,
-    ctx: commands.Context = None,
-    inter: disnake.CommandInteraction = None,
-):
+async def parse_input_hp_mods(input_hp_mods, ctx=None):
     """Parses the input_hp_mods.
 
     Args:
@@ -332,10 +268,8 @@ async def parse_input_hp_mods(
                 unknown = f"`{char_hp_mod}` HP modifier"
 
                 if ctx:
-                    await ctx.send((helper.valron_doesnt_know(unknown, ctx=ctx)))
-
-                if inter:
-                    await inter.send((helper.valron_doesnt_know(unknown, inter=inter)))
+                    await bot_typing(ctx, 1)
+                    await ctx.send((helper.valron_doesnt_know(ctx, unknown)))
 
                 flags.no_error = False
                 break
@@ -343,12 +277,7 @@ async def parse_input_hp_mods(
     return flags
 
 
-async def parse_input_classes_and_levels(
-    input_classes_and_levels,
-    flags,
-    ctx: commands.Context = None,
-    inter: disnake.CommandInteraction = None,
-):
+async def parse_input_classes_and_levels(input_classes_and_levels, flags, ctx=None):
     """Parses the input_classes_and_levels.
 
     Args:
@@ -390,12 +319,8 @@ async def parse_input_classes_and_levels(
                     unknown = f"`{matched_dnd_class}` class"
 
                     if ctx:
-                        await ctx.send((helper.valron_doesnt_know(unknown, ctx=ctx)))
-
-                    if inter:
-                        await inter.send(
-                            (helper.valron_doesnt_know(unknown, inter=inter))
-                        )
+                        await bot_typing(ctx, 1)
+                        await ctx.send((helper.valron_doesnt_know(ctx, unknown)))
 
                     flags.no_error = False
                     break
@@ -403,21 +328,12 @@ async def parse_input_classes_and_levels(
             # If it does not follow word## pattern
             else:
                 if ctx:
+                    await bot_typing(ctx, 1)
                     await ctx.send(
                         f"Oof! {ctx.author.mention}, my friend, "
-                        + "kindly check your classes and levels! "
-                        + f"You sent `{input_classes_and_levels}`. "
-                        + "It must look something like this `barb1/wizard2`. "
-                        + "My wife says to use `/help` for more information."
-                    )
-
-                if inter:
-                    await inter.send(
-                        f"Oof! {inter.author.mention}, my friend, "
-                        + "kindly check your classes and levels! "
-                        + f"You sent `{input_classes_and_levels}`. "
-                        + "It must look something like this `barb1/wizard2`. "
-                        + "My wife says to use `/help` for more information."
+                        "kindly check your classes and levels! "
+                        "It must look something like this `barb1/wizard2`. "
+                        "My wife says to use `?help` for more information."
                     )
 
                 flags.no_error = False
@@ -430,7 +346,7 @@ async def parse_input_classes_and_levels(
     return (classes_and_levels, flags)
 
 
-async def bot_typing(ctx: commands.Context, time):
+async def bot_typing(ctx, time):
     """Triggers 'Valron is typing...' in Discord.
 
     Args:
@@ -510,13 +426,7 @@ def apply_hp_mods(partial_hp, total_level, flags):
 
 
 def bot_reply_builder(
-    con_modifier,
-    classes_and_levels,
-    total_level,
-    final_hp,
-    flags,
-    ctx: commands.Context = None,
-    inter: disnake.CommandInteraction = None,
+    con_modifier, classes_and_levels, total_level, final_hp, flags, ctx
 ):
     """Returns the formatted reply of the bot.
 
@@ -533,22 +443,14 @@ def bot_reply_builder(
         str: Formatted reply of the bot.
 
     """
-    name = ""
-
-    if ctx:
-        name = ctx.author.mention
-
-    if inter:
-        name = inter.author.mention
-
     if total_level > 20:
         bot_reply = (
-            f"Oof! {name}, my friend, you have a level "
+            f"Oof! {ctx.author.mention}, my friend, you have a level "
             + f"`{total_level}` character?  My wife says to double check its "
             + "levels! But if you really want to know, a "
         )
     else:
-        bot_reply = f"{name}, my friend, a "
+        bot_reply = f"{ctx.author.mention}, my friend, a "
 
     if flags.is_hilldwarf:
         bot_reply = bot_reply + "`Hill Dwarf` "
@@ -613,14 +515,14 @@ async def on_ready():
 @bot.event
 async def on_guild_join(guild):
     """See https://discordpy.readthedocs.io/en/latest/api.html#event-reference"""
-    # print(f"Joined {guild.name}!")
+    print(f"Joined {guild.name}!")
     await bot.change_presence(activity=helper.update_guild_counter(len(bot.guilds)))
 
 
 @bot.event
 async def on_guild_remove(guild):
     """See https://discordpy.readthedocs.io/en/latest/api.html#event-reference"""
-    # print(f"Left {guild.name}...")
+    print(f"Left {guild.name}...")
     await bot.change_presence(activity=helper.update_guild_counter(len(bot.guilds)))
 
 
