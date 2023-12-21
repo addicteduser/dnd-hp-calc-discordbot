@@ -3,24 +3,31 @@
 This module provides helper functions.
 """
 
+from typing import List, Tuple, Union
+
 import disnake
 from disnake.ext import commands
+
 import utils.constants as constants
+
+from .classes import DndClass
 
 
 ####################
 ## STRING BUILDER ##
 ####################
-def classes_and_levels_builder(classes_and_levels):
+def classes_and_levels_builder(classes_and_levels: List[Tuple[DndClass, int]]) -> str:
     """Returns the formatted classes and levels string for the bot reply.
 
-    Args:
-        classes_and_levels (list(Class, int)): A list of tuples wherein each
-            element is the class and corresponding level.
+    Parameters
+    ----------
+    classes_and_levels : List[Tuple[DndClass, int]]
+        A list of tuples wherein each element is the class and corresponding level.
 
-    Returns:
-        str: Formatted classes and levels string.
-
+    Returns
+    -------
+    str
+        Formatted classes and levels string.
     """
     result = ""
 
@@ -30,15 +37,18 @@ def classes_and_levels_builder(classes_and_levels):
     return result[:-3]
 
 
-def alias_builder(alias_list):
+def alias_builder(alias_list: List[List[str]]) -> str:
     """Returns the formatted alias list for the bot reply.
 
-    Args:
-        alias_list (list(list(str))): The list of alias lists.
+    Parameters
+    ----------
+    alias_list : List[List[str]]
+        The list of alias lists.
 
-    Returns:
-        str: Formatted alias list string.
-
+    Returns
+    -------
+    str
+        Formatted alias list string.
     """
     result = ""
 
@@ -54,17 +64,27 @@ def alias_builder(alias_list):
 
 
 def valron_doesnt_know(
-    the_thing, ctx: commands.Context = None, inter: disnake.CommandInteraction = None
-):
+    the_thing: str,
+    ctx: commands.Context = None,
+    inter: disnake.CommandInteraction = None,
+) -> str:
     """Returns the bot's reply when it does not recognize an input.
 
-    Args:
-        ctx (discord.ext.commands.Context): See discordpy docs.
-        the_thing (str): The unrecognized input.
+    Parameters
+    ----------
+    the_thing : str
+        _description_
+    ctx : commands.Context, optional
+        The context in which a command is being invoked under, by default None.
+        See [this](https://docs.disnake.dev/en/latest/ext/commands/api/context.html#disnake.ext.commands.Context) for more info.
+    inter : disnake.CommandInteraction, optional
+        The slash command interaction, by default None.
+        See [this](https://docs.disnake.dev/en/latest/api/interactions.html#disnake.ApplicationCommandInteraction) for more info.
 
-    Returns:
-        str: Formatted reply of the bot.
-
+    Returns
+    -------
+    str
+        Formatted reply of the bot.
     """
     name = ""
 
@@ -84,22 +104,36 @@ def valron_doesnt_know(
 ###################
 ## OTHER HELPERS ##
 ###################
-def update_guild_counter(num_guilds):
-    """Updates status displaying the number of Discord servers the bot belongs in."""
+def update_guild_counter(num_guilds: int) -> disnake.Activity:
+    """Updates status displaying the number of Discord servers the bot belongs in.
+
+    Parameters
+    ----------
+    num_guilds : int
+        The number of Discord servers the bot belongs in.
+
+    Returns
+    -------
+    disnake.Activity
+        The Discord activity.
+    """
     return disnake.Activity(
         name=f"D&D 5e in {num_guilds} guilds | /help", type=disnake.ActivityType.playing
     )
 
 
-def get_class(alias):
+def get_class(alias: str) -> Union[DndClass, None]:
     """Returns the D&D class given an alias.
 
-    Args:
-        alias (str): An alias of the class.
+    Parameters
+    ----------
+    alias : str
+        An alias of the class.
 
-    Returns:
-        Class: A D&D class.
-
+    Returns
+    -------
+    DndClass
+        The DndClass with the alias. Else, returns None.
     """
     dnd_class = None
     i = 0
@@ -114,16 +148,20 @@ def get_class(alias):
     return dnd_class
 
 
-def embed_builder(valron, description, show_thumbnail=True):
+def embed_builder(valron: str, description: str) -> disnake.Embed:
     """Return the base embed.
 
-    Args:
-        valron (str): The bot's name.
-        description (str): The `description` field of the embed.
+    Parameters
+    ----------
+    valron : str
+        The bot's name.
+    description : str
+        The `description` field of the embed.
 
-    Returns:
-        discord.Embed: A discord Embed.
-
+    Returns
+    -------
+    disnake.Embed
+        A discord Embed.
     """
     embed = disnake.Embed(
         title="", url=constants.TOP_GG_LINK, description=description, color=0x1ABC9C
