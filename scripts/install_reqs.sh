@@ -6,8 +6,8 @@ LIGHT_GREEN="\033[1;32m"
 
 #----------
 echo -e "${GREEN}Installs the python packages${NC}"
-echo -e "${LIGHT_GREEN}$ pip3 install -r requirements.txt${NC}"
-pip3 install -r requirements.txt
+echo -e "${LIGHT_GREEN}$ python3 -m pip install -r requirements.txt${NC}"
+python3 -m pip install -r requirements.txt
 echo ""
 
 
