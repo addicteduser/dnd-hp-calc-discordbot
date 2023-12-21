@@ -28,7 +28,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -->
 
-## [Unreleased](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/2.0.0...HEAD) - YYYY-MM-DD
+## [Unreleased](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/3.0.0...HEAD) - YYYY-MM-DD
+
+## [3.0.0](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/2.0.0...3.0.0) - 2024-12-21
+
+### Changed
+
+- Update disnake from 2.5.2 to 2.9.1.
 
 ## [2.0.0](https://github.com/addicteduser/dnd-hp-calc-discordbot/compare/1.6.2...2.0.0) - 2022-08-31
 

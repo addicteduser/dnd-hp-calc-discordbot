@@ -55,10 +55,3 @@ Invite it to your Discord server with this [link](https://discordapp.com/api/oau
 Hello, hello! This bot that I have made is just a little passion project of mine. Any support or donation ([PayPal](https://paypal.me/addicteduser) | [Ko-Fi](https://ko-fi.com/addicteduser) | [GCash](https://i.imgur.com/fnMORVa.jpg)) is much appreciated to keep up with the hosting fees. Thank you very much!
 
 For feedback or suggestions, join the support discord server [here](https://discord.gg/waCBQuD).
-
-<!--
-CHEAT SHEET
-- See if app is running: ps ax | grep bot.py
-- End the app with: pkill -f bot.py
-- Run app while saving logs: python3 -u bot.py > output.log &
--->

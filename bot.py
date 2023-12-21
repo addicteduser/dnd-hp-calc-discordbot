@@ -9,20 +9,19 @@ import asyncio
 import math
 import os
 import re
-
-# import time
-import typing
+import time
+from typing import List, Tuple
 
 import disnake
-from disnake.errors import HTTPException
 from disnake.ext import commands
-from disnake.utils import get
 from dotenv import load_dotenv
+
 from utils import constants, helper
-from utils.classes import Flags
+from utils.classes import DndClass, Flags
 
 # Load environment variables
 load_dotenv()
+
 
 command_prefix = commands.when_mentioned
 description = "A bot for calculating your D&D 5e character's average hit points."
@@ -54,7 +53,7 @@ async def help(inter: disnake.CommandInteraction):
     await inter.send(embed=embed)
 
 
-async def build_help_embed():
+async def build_help_embed() -> disnake.Embed:
     """Build the embed for the `help` command"""
 
     embed = helper.embed_builder(
@@ -102,7 +101,7 @@ async def options(inter: disnake.CommandInteraction):
     await inter.send(embed=embed)
 
 
-async def build_options_embed():
+async def build_options_embed() -> disnake.Embed:
     """Build the embed for the `options` command"""
     embed = helper.embed_builder(
         bot.user.name,
@@ -144,7 +143,7 @@ async def links(inter: disnake.CommandInteraction):
     await inter.send(embed=embed)
 
 
-async def build_links_embed():
+async def build_links_embed() -> disnake.Embed:
     """Build the embed for the `links` command"""
     embed = helper.embed_builder(
         bot.user.name,
@@ -230,9 +229,9 @@ async def build_hp_embed(
     input_hp_mods: str = None,
     ctx: commands.Context = None,
     inter: disnake.CommandInteraction = None,
-):
+) -> disnake.Embed:
     """Build the embed for the `hp` command"""
-    # tic = time.perf_counter()
+    tic = time.perf_counter()
 
     # Parse input
     (classes_and_levels, flags) = await parse_input(
@@ -245,8 +244,10 @@ async def build_hp_embed(
     # Apply HP modifiers
     final_hp = apply_hp_mods(partial_hp, total_level, flags)
 
-    # toc = time.perf_counter()
-    # print(f"Performance: {toc - tic:0.4f} seconds")
+    toc = time.perf_counter()
+
+    if constants.SHOW_PERF:
+        print(f"Performance: {toc - tic:0.4f} seconds")
 
     # Send bot reply
     if flags.no_error:
@@ -269,8 +270,8 @@ async def build_hp_embed(
 
 
 async def parse_input(
-    input_classes_and_levels,
-    input_hp_mods,
+    input_classes_and_levels: str,
+    input_hp_mods: str,
     ctx: commands.Context = None,
     inter: disnake.CommandInteraction = None,
 ):
@@ -279,7 +280,8 @@ async def parse_input(
     Args:
         input_classes_and_levels (str): The input classes and levels.
         input_hp_mods (str): The input HP modifiers.
-        ctx (discord.ext.commands.Context): See discordpy docs.
+        ctx (disnake.ext.commands.Context): The context in which a command is being invoked under.
+            See [this](https://docs.disnake.dev/en/latest/ext/commands/api/context.html#disnake.ext.commands.Context) for more info.
 
     Returns:
         (list(Class, int), Flags): The first one is a list of tuples
@@ -294,19 +296,27 @@ async def parse_input(
 
 
 async def parse_input_hp_mods(
-    input_hp_mods,
+    input_hp_mods: str,
     ctx: commands.Context = None,
     inter: disnake.CommandInteraction = None,
-):
-    """Parses the input_hp_mods.
+) -> Flags:
+    """Parses the input_hp_mods into the Flags class.
 
-    Args:
-        input_hp_mods (str): The input HP modifiers.
-        ctx (discord.ext.commands.Context): See discordpy docs.
+    Parameters
+    ----------
+    input_hp_mods : str
+        The input HP modifiers.
+    ctx : commands.Context, optional
+        The context in which a command is being invoked under, by default None.
+            See [this](https://docs.disnake.dev/en/latest/ext/commands/api/context.html#disnake.ext.commands.Context) for more info.
+    inter : disnake.CommandInteraction, optional
+        The slash command interaction, by default None.
+        See [this](https://docs.disnake.dev/en/latest/api/interactions.html#disnake.ApplicationCommandInteraction) for more info.
 
-    Returns:
-        Flags: The collection of HP modifier flags.
-
+    Returns
+    -------
+    Flags
+        The collection of HP modifier flags.
     """
     flags = Flags(True, False, False, False)
 
@@ -317,7 +327,6 @@ async def parse_input_hp_mods(
 
         # For each char_hp_mod
         for char_hp_mod in char_hp_mods:
-
             # Check if valid char_hp_mod
             if char_hp_mod in constants.HP_MODS():
                 if char_hp_mod in constants.HILLDWARF_MODS():
@@ -344,24 +353,39 @@ async def parse_input_hp_mods(
 
 
 async def parse_input_classes_and_levels(
-    input_classes_and_levels,
-    flags,
+    input_classes_and_levels: str,
+    flags: Flags,
     ctx: commands.Context = None,
     inter: disnake.CommandInteraction = None,
-):
+) -> Tuple[List[Tuple[DndClass, int]], Flags]:
     """Parses the input_classes_and_levels.
 
-    Args:
-        input_classes_and_levels (str): The input classes and levels.
-        flags (Flags): The collection of HP modifier flags.
-        ctx (discord.ext.commands.Context): See discordpy docs.
+    Parameters
+    ----------
+    input_classes_and_levels : str
+        The input classes and levels.
+    flags : Flags
+        The collection of HP modifier flags.
+    ctx : commands.Context, optional
+        The context in which a command is being invoked under, by default None.
+        See [this](https://docs.disnake.dev/en/latest/ext/commands/api/context.html#disnake.ext.commands.Context) for more info.
+    inter : disnake.CommandInteraction, optional
+        The slash command interaction, by default None.
+        See [this](https://docs.disnake.dev/en/latest/api/interactions.html#disnake.ApplicationCommandInteraction) for more info.
 
-    Returns:
-        (list(Class, int), Flags): The first one is a list of tuples
-            wherein each element is the Class and level. The second
-            is the collection of HP modifier flags.
+    Returns
+    -------
+    Tuple[List[Tuple[DndClass, int]], Flags]
+        A tuple containing:
+        - (1) a list of tuples wherein each element is the DndClass and level
+        - (2) the collection of HP modifier flags
 
+    Raises
+    ------
+    commands.MissingRequiredArgument
+        If there are no parsed_classes_and_levels.
     """
+
     classes_and_levels = []
 
     # List of word##
@@ -369,7 +393,6 @@ async def parse_input_classes_and_levels(
 
     # If there are parsed_classes_and_levels
     if parsed_classes_and_levels:
-
         # For each parsed_class_and_level, get class and level
         for parsed_class_and_level in parsed_classes_and_levels:
             class_and_level = parsed_class_and_level.strip()
@@ -430,29 +453,37 @@ async def parse_input_classes_and_levels(
     return (classes_and_levels, flags)
 
 
-async def bot_typing(ctx: commands.Context, time):
+async def bot_typing(ctx: commands.Context, time: int):
     """Triggers 'Valron is typing...' in Discord.
 
-    Args:
-        ctx (discord.ext.commands.Context): See discordpy docs.
-        time (int): Number of seconds to wait.
-
+    Parameters
+    ----------
+    ctx : commands.Context
+        The context in which a command is being invoked under.
+        See [this](https://docs.disnake.dev/en/latest/ext/commands/api/context.html#disnake.ext.commands.Context) for more info.
+    time : int
+        Number of seconds to wait.
     """
     await ctx.trigger_typing()
     await asyncio.sleep(time)
 
 
-def calculate_base_hp(classes_and_levels, con_modifier):
+def calculate_base_hp(
+    classes_and_levels: List[Tuple[DndClass, int]], con_modifier: int
+) -> Tuple[int, int]:
     """Calculates the base hit points given the classes, levels, and constitution modifier.
 
-    Args:
-        classes_and_levels (list(Class, int)): A list of tuples wherein each
-            element is the class and corresponding level.
-        con_modifier (int): The constitution modifer.
+    Parameters
+    ----------
+    classes_and_levels : List[Tuple[DndClass, int]]
+        A list of tuples wherein each element is the class and corresponding level.
+    con_modifier : int
+        The constitution modifer.
 
-    Returns:
-        (int, int): A tuple of the partial_hp and total character level.
-
+    Returns
+    -------
+    Tuple[int, int]
+        A tuple of the partial_hp and total character level.
     """
     is_level_1 = True
     current_hp = 0
@@ -485,17 +516,22 @@ def calculate_base_hp(classes_and_levels, con_modifier):
     return (current_hp, total_level)
 
 
-def apply_hp_mods(partial_hp, total_level, flags):
+def apply_hp_mods(partial_hp: int, total_level: int, flags: Flags) -> int:
     """Calculates the hit points with the HP modifiers.
 
-    Args:
-        parital_hp (int): The base hit points.
-        total_level (int): The total character level.
-        flags (Flags): The collection of HP modifier flags
+    Parameters
+    ----------
+    partial_hp : int
+        The base hit points.
+    total_level : int
+        The total character level.
+    flags : Flags
+        The collection of HP modifier flags.
 
-    Returns:
-        int: The hit points with the HP modifiers.
-
+    Returns
+    -------
+    int
+        The hit points with the HP modifiers.
     """
     if flags.is_hilldwarf:
         partial_hp = partial_hp + total_level
@@ -510,28 +546,39 @@ def apply_hp_mods(partial_hp, total_level, flags):
 
 
 def bot_reply_builder(
-    con_modifier,
-    classes_and_levels,
-    total_level,
-    final_hp,
-    flags,
+    con_modifier: int,
+    classes_and_levels: List[Tuple[DndClass, int]],
+    total_level: int,
+    final_hp: int,
+    flags: Flags,
     ctx: commands.Context = None,
     inter: disnake.CommandInteraction = None,
-):
+) -> str:
     """Returns the formatted reply of the bot.
 
-    Args:
-        con_modifier (int): The constitution modifer.
-        classes_and_levels (list(Class, int)): A list of tuples wherein each
-            element is the class and corresponding level.
-        final_hp: The calculated hit points.
-        total_level (int): The total character level.
-        flags (Flags): The collection of HP modifier flags
-        ctx (discord.ext.commands.Context): See discordpy docs.
+    Parameters
+    ----------
+    con_modifier : int
+        The constitution modifer.
+    classes_and_levels : List[Tuple[DndClass, int]]
+        A list of tuples wherein each element is the class and corresponding level.
+    total_level : int
+        The total character level.
+    final_hp : int
+        The calculated hit points.
+    flags : Flags
+        The collection of HP modifier flags.
+    ctx : commands.Context, optional
+        The context in which a command is being invoked under, by default None.
+        See [this](https://docs.disnake.dev/en/latest/ext/commands/api/context.html#disnake.ext.commands.Context) for more info.
+    inter : disnake.CommandInteraction, optional
+        The slash command interaction, by default None.
+        See [this](https://docs.disnake.dev/en/latest/api/interactions.html#disnake.ApplicationCommandInteraction) for more info.
 
-    Returns:
-        str: Formatted reply of the bot.
-
+    Returns
+    -------
+    str
+        Formatted reply of the bot.
     """
     name = ""
 
@@ -568,6 +615,7 @@ def bot_reply_builder(
 
     bot_reply = bot_reply + f"has `{final_hp}` hit points."
 
+    # from disnake.errors import HTTPException
     # guilds = os.getenv("GUILDS")
     # member = os.getenv("MEMBER1")
     # if guilds:
@@ -589,8 +637,6 @@ def bot_reply_builder(
 ########################
 ## DISCORD BOT EVENTS ##
 ########################
-
-
 @bot.event
 async def on_connect():
     """See https://discordpy.readthedocs.io/en/latest/api.html#event-reference"""
